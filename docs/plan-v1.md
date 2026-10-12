@@ -19,7 +19,7 @@ Companion to [design.md](design.md). Each milestone ends with something you can 
 - [~] Supabase project (free tier) + keep-alive scheduled ping (GitHub Actions) — workflow done; migration not yet applied
 - [x] Schema migrations for v1 tables (design.md §14) + RLS policies + policy tests (`npm run test:db`, 35 checks)
 - [x] Auth: Google + email magic link; `profiles` row on first sign-in (code done; needs project config)
-- [ ] Vercel deployment (Hobby), env vars, preview deploys
+- [x] Vercel deployment (Hobby), env vars, preview deploys — https://kazkir.vercel.app (sin1)
 - [x] PWA manifest, icons, service worker shell; "Add to Home Screen" onboarding using the phone-frame assets
 
 **Done when:** you can sign in on the deployed URL and install Kazkir on your phone's home screen.

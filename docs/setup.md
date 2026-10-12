@@ -6,8 +6,9 @@ One-time configuration outside the code. Project ref: `wcgyajmhxbsgidokzxnh`.
 
 1. **Schema:** run `supabase/migrations/*.sql` in the SQL Editor (done 2026-10-12).
 2. **URL configuration** (Authentication → URL Configuration):
-   - Site URL: `http://localhost:3000` (switch to the Vercel URL after deploy)
-   - Redirect URLs: `http://localhost:3000/auth/callback`, later `https://<vercel-domain>/auth/callback`
+   - Site URL: `https://kazkir.vercel.app`
+   - Redirect URLs: `https://kazkir.vercel.app/auth/callback`, `http://localhost:3000/auth/callback`,
+     `https://kazkir-*.vercel.app/auth/callback` (branch preview deployments)
 3. **Magic Link email template** (Authentication → Emails → Magic Link). Replace the body with:
 
    ```html
@@ -29,12 +30,18 @@ One-time configuration outside the code. Project ref: `wcgyajmhxbsgidokzxnh`.
 ## Google Cloud (project "Kazkir")
 
 - OAuth client type: Web application
-  - Authorized JavaScript origins: `http://localhost:3000` (+ Vercel URL later)
+  - Authorized JavaScript origins: `https://kazkir.vercel.app`, `http://localhost:3000`
   - Authorized redirect URI: `https://wcgyajmhxbsgidokzxnh.supabase.co/auth/v1/callback`
-- Branding → Authorized domains: `wcgyajmhxbsgidokzxnh.supabase.co` (+ Vercel domain later)
+- Branding → Authorized domains: `wcgyajmhxbsgidokzxnh.supabase.co`, `kazkir.vercel.app`
 - Audience: **Testing** with test users until the app has a public home page and privacy policy;
   then add both links on the Branding page and click **Publish app** (no review needed for
   name/email scopes, as long as no logo is uploaded).
+
+## Vercel (personal Hobby account, project `kazkir`)
+
+- Production: https://kazkir.vercel.app, deploys on every push to `main`; branches get preview URLs
+- Region: `sin1` (Singapore) via `vercel.json`
+- Env vars (type **Config**, all environments): `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
 
 ## GitHub (`ericlimquip-dot/kazkir`)
 

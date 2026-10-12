@@ -1,0 +1,62 @@
+{
+  "Common": {
+    "close": "Close",
+    "language": "Language",
+    "english": "English",
+    "indonesian": "Bahasa Indonesia"
+  },
+  "Landing": {
+    "heading": "Every trip, planned together",
+    "subheading": "Stop juggling WhatsApp chats, screenshots and spreadsheets. Kazkir brings your itinerary, tours, references and Rupiah budget into one place.",
+    "featuresLabel": "Kazkir features",
+    "features": {
+      "together": {
+        "title": "Plan together",
+        "description": "Invite friends, comment and propose changes"
+      },
+      "itinerary": {
+        "title": "Day-by-day itinerary",
+        "description": "Drag places between days, even before dates are set"
+      },
+      "tours": {
+        "title": "Tours and vouchers",
+        "description": "Pickup times, stops and vouchers, available offline"
+      },
+      "references": {
+        "title": "References from socials",
+        "description": "Save Instagram, Threads and TikTok finds into your plan"
+      }
+    }
+  },
+  "Gallery": {
+    "title": "Component gallery",
+    "intro": "Kazkir building blocks in the Features 01 style.",
+    "buttons": "Buttons",
+    "primary": "Add item",
+    "secondary": "Invite friends",
+    "soft": "Today",
+    "ghost": "Cancel",
+    "chips": "Status chips",
+    "statusIdea": "Idea",
+    "statusPlanned": "Planned",
+    "statusBooked": "Booked",
+    "statusDone": "Done",
+    "days": "Day list",
+    "tabs": "Trip tabs",
+    "tabPlan": "Plan",
+    "tabIdeas": "Ideas",
+    "tabMoney": "Money",
+    "tabPeople": "People",
+    "empty": "Empty state",
+    "emptyTitle": "No references yet",
+    "emptyDescription": "Paste a link from Instagram, Threads or TikTok to start collecting ideas.",
+    "emptyAction": "Paste link",
+    "sheet": "Item sheet",
+    "openSheet": "Open item",
+    "sheetTitle": "Ramen Ichiran Shibuya",
+    "sheetBody": "Food · Day 2 · 12:30 local time",
+    "dayLabel": "Day {n}",
+    "dayUndated": "No date yet",
+    "dayItems": "{count, plural, =0 {No items} one {# item} other {# items}}"
+  }
+}

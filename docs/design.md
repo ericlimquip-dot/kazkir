@@ -12,17 +12,17 @@ Kazkir is a trip planner for leisure trips abroad with friends and colleagues. P
 
 ## 2. Stack (all free tiers)
 
-| Concern | Choice | Notes |
-|---|---|---|
-| App | Next.js 16 (App Router), TypeScript 5, React 19 | Installable PWA |
-| Styling | Tailwind CSS 4 + Originkit theme tokens | See §8 |
-| Hosting | Vercel Hobby | |
-| Backend | Supabase free: Postgres, Auth, Realtime, Storage | 500 MB DB, 1 GB storage; scheduled keep-alive ping so the project never pauses |
-| Auth | Google sign-in + email magic link | No SMS (costs money) |
-| Places | Google Places API, card on file, **hard daily quota caps at the free allowance** | Fallback: paste a Google Maps link, coordinates parsed from it |
-| Exchange rates | Free daily rate API, owner override per trip | |
-| Push | Web Push (VAPID) from a Supabase scheduled function | iPhone requires "Add to Home Screen" |
-| Offline | Service worker + IndexedDB cache + outbox queue | |
+| Concern        | Choice                                                                           | Notes                                                                          |
+| -------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| App            | Next.js 16 (App Router), TypeScript 5, React 19                                  | Installable PWA                                                                |
+| Styling        | Tailwind CSS 4 + Originkit theme tokens                                          | See §8                                                                         |
+| Hosting        | Vercel Hobby                                                                     |                                                                                |
+| Backend        | Supabase free: Postgres, Auth, Realtime, Storage                                 | 500 MB DB, 1 GB storage; scheduled keep-alive ping so the project never pauses |
+| Auth           | Google sign-in + email magic link                                                | No SMS (costs money)                                                           |
+| Places         | Google Places API, card on file, **hard daily quota caps at the free allowance** | Fallback: paste a Google Maps link, coordinates parsed from it                 |
+| Exchange rates | Free daily rate API, owner override per trip                                     |                                                                                |
+| Push           | Web Push (VAPID) from a Supabase scheduled function                              | iPhone requires "Add to Home Screen"                                           |
+| Offline        | Service worker + IndexedDB cache + outbox queue                                  |                                                                                |
 
 ## 3. Trip lifecycle
 
@@ -37,15 +37,15 @@ Kazkir is a trip planner for leisure trips abroad with friends and colleagues. P
 
 Shared fields: title, type, day (or unscheduled/wishlist), order, start/end time or "anytime", time zone, place, cost estimate (amount + currency, per person or shared), status (`idea → planned → booked → done`), notes, attachments, comments, votes.
 
-| Type | Extra fields |
-|---|---|
-| ✈️ Flight | flight number, from/to airports, terminals, booking code |
-| 🏨 Stay | check-in date/time, check-out date/time; rendered on every night it covers |
-| 🚐 Tour | operator, contact (WhatsApp/phone), pickup time + place, voucher, inclusions, cancellation deadline, **stops** (ordered list of places/times) |
-| 📍 Place / Activity | — |
-| 🍜 Food | — |
-| 🚆 Transport | mode (train/bus/transfer/ferry), from → to |
-| 📝 Free time / Note | — |
+| Type                | Extra fields                                                                                                                                  |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| ✈️ Flight           | flight number, from/to airports, terminals, booking code                                                                                      |
+| 🏨 Stay             | check-in date/time, check-out date/time; rendered on every night it covers                                                                    |
+| 🚐 Tour             | operator, contact (WhatsApp/phone), pickup time + place, voucher, inclusions, cancellation deadline, **stops** (ordered list of places/times) |
+| 📍 Place / Activity | —                                                                                                                                             |
+| 🍜 Food             | —                                                                                                                                             |
+| 🚆 Transport        | mode (train/bus/transfer/ferry), from → to                                                                                                    |
+| 📝 Free time / Note | —                                                                                                                                             |
 
 Flights and stays are entered by hand with the booking PDF/screenshot attached. Tours can be added before departure or on the spot in under a minute.
 
@@ -87,19 +87,19 @@ The landing section in `components/originkit/features-01.tsx` sets the visual la
 
 **Tokens** (to be defined in `app/kazkir-theme.css` as Tailwind `@theme` values):
 
-| Token | Value | Use |
-|---|---|---|
-| `ink` | `#1e1e1e` / headings `#010110` | primary text, icons |
-| `muted` | `#45545e` | body/secondary text |
-| `muted-teal` | `#4c6a75` | text on active/selected surfaces |
-| `muted-grey` | `#60605d` | tertiary text |
-| `sky-100` | `#bce7f8` | selected tab / active day / primary chip |
-| `sky-300` | `#9bd3e9` | selected border |
-| `sky-400` | `#90d7f3` | active icon tile border |
-| `line` | `#e5e5e5`, `#dfe1e2` | borders, dividers |
-| `hover` | `#f7f9fb` | hover surface |
-| `surface-warm` | gradient `135deg #fffcf5 → #fdfdfd → #f7fcff → #f0f8ff` | preview panels, empty states |
-| `dot-grid` | radial `#c8cedd` 1px on 11px grid, 40% | canvas backgrounds (Plan board) |
+| Token          | Value                                                   | Use                                      |
+| -------------- | ------------------------------------------------------- | ---------------------------------------- |
+| `ink`          | `#1e1e1e` / headings `#010110`                          | primary text, icons                      |
+| `muted`        | `#45545e`                                               | body/secondary text                      |
+| `muted-teal`   | `#4c6a75`                                               | text on active/selected surfaces         |
+| `muted-grey`   | `#60605d`                                               | tertiary text                            |
+| `sky-100`      | `#bce7f8`                                               | selected tab / active day / primary chip |
+| `sky-300`      | `#9bd3e9`                                               | selected border                          |
+| `sky-400`      | `#90d7f3`                                               | active icon tile border                  |
+| `line`         | `#e5e5e5`, `#dfe1e2`                                    | borders, dividers                        |
+| `hover`        | `#f7f9fb`                                               | hover surface                            |
+| `surface-warm` | gradient `135deg #fffcf5 → #fdfdfd → #f7fcff → #f0f8ff` | preview panels, empty states             |
+| `dot-grid`     | radial `#c8cedd` 1px on 11px grid, 40%                  | canvas backgrounds (Plan board)          |
 
 **Shape & depth:** cards `rounded-3xl` white with the layered `CARD_SHADOW`; list rows/tabs `rounded-xl`; panels `rounded-[17px]`; icon tiles 40px `rounded-lg` with white→`#f2f2f2` gradient (idle) or white + `sky-400` border (active).
 
@@ -191,4 +191,3 @@ Row-level security on every table: access only through `trip_members`; write rig
 - **v1** also includes the proposals workflow (moved from v1.1 on 2026-10-12).
 - **v1.1:** budget estimates + rate override, bill splitting + settle-up.
 - **v2:** maps view, public read-only web viewer, AI place detection, booking-email parsing, native store wrapper.
-

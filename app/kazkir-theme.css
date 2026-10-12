@@ -1,0 +1,104 @@
+/*
+ * Kazkir design tokens, derived from the Originkit "Features 01" section.
+ * See docs/design.md §8. Import from globals.css after tailwindcss.
+ */
+
+@theme {
+  --color-ink: #1e1e1e;
+  --color-ink-strong: #010110;
+  --color-muted: #45545e;
+  --color-muted-teal: #4c6a75;
+  --color-muted-grey: #60605d;
+
+  --color-sky-100: #bce7f8;
+  --color-sky-300: #9bd3e9;
+  --color-sky-400: #90d7f3;
+
+  --color-line: #e5e5e5;
+  --color-line-soft: #dfe1e2;
+  --color-hover: #f7f9fb;
+  --color-tile-end: #f2f2f2;
+  --color-dot: #c8cedd;
+
+  --radius-panel: 17px;
+
+  --shadow-card:
+    0 4px 4px rgba(121, 85, 13, 0.05), 0 1px 1px rgba(125, 125, 125, 0.15),
+    0 55px 33px rgba(166, 166, 166, 0.05), 0 24px 24px rgba(166, 166, 166, 0.09),
+    0 6px 13px rgba(166, 166, 166, 0.1);
+  --shadow-active:
+    0 5px 7px rgba(4, 139, 240, 0.05), 0 5px 5px rgba(22, 26, 29, 0.05),
+    0 1px 1px rgba(22, 26, 29, 0.15);
+
+  --ease-out-soft: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@utility bg-surface-warm {
+  background-image: linear-gradient(135deg, #fffcf5 0%, #fdfdfd 32%, #f7fcff 68%, #f0f8ff 100%);
+}
+
+@utility bg-dot-grid {
+  background-image: radial-gradient(circle, var(--color-dot) 1px, transparent 1px);
+  background-size: 11px 11px;
+}
+
+/* Same keyframes as the Features 01 section, so app screens animate identically. */
+@keyframes hero-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@theme {
+  --animate-hero-reveal: hero-reveal 300ms cubic-bezier(0.215, 0.61, 0.355, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @keyframes hero-reveal {
+    from {
+      opacity: 0;
+      transform: none;
+      filter: none;
+    }
+    to {
+      opacity: 1;
+      transform: none;
+      filter: none;
+    }
+  }
+}
+
+@keyframes section-rise {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@theme {
+  --animate-section-rise: section-rise 500ms cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @keyframes section-rise {
+    from {
+      opacity: 0;
+      transform: none;
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}

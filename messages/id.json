@@ -1,0 +1,62 @@
+{
+  "Common": {
+    "close": "Tutup",
+    "language": "Bahasa",
+    "english": "English",
+    "indonesian": "Bahasa Indonesia"
+  },
+  "Landing": {
+    "heading": "Setiap perjalanan, direncanakan bersama",
+    "subheading": "Tidak perlu lagi bolak-balik antara chat WhatsApp, tangkapan layar, dan spreadsheet. Kazkir menyatukan itinerary, tur, referensi, dan anggaran Rupiah di satu tempat.",
+    "featuresLabel": "Fitur Kazkir",
+    "features": {
+      "together": {
+        "title": "Rencanakan bersama",
+        "description": "Undang teman, beri komentar, dan usulkan perubahan"
+      },
+      "itinerary": {
+        "title": "Itinerary per hari",
+        "description": "Geser tempat antarhari, bahkan sebelum tanggal ditentukan"
+      },
+      "tours": {
+        "title": "Tur dan voucher",
+        "description": "Jam jemput, titik singgah, dan voucher, bisa dibuka offline"
+      },
+      "references": {
+        "title": "Referensi dari media sosial",
+        "description": "Simpan temuan dari Instagram, Threads, dan TikTok ke rencanamu"
+      }
+    }
+  },
+  "Gallery": {
+    "title": "Galeri komponen",
+    "intro": "Komponen dasar Kazkir dengan gaya Features 01.",
+    "buttons": "Tombol",
+    "primary": "Tambah item",
+    "secondary": "Undang teman",
+    "soft": "Hari ini",
+    "ghost": "Batal",
+    "chips": "Status",
+    "statusIdea": "Ide",
+    "statusPlanned": "Direncanakan",
+    "statusBooked": "Sudah dipesan",
+    "statusDone": "Selesai",
+    "days": "Daftar hari",
+    "tabs": "Tab perjalanan",
+    "tabPlan": "Rencana",
+    "tabIdeas": "Ide",
+    "tabMoney": "Uang",
+    "tabPeople": "Anggota",
+    "empty": "Tampilan kosong",
+    "emptyTitle": "Belum ada referensi",
+    "emptyDescription": "Tempel link dari Instagram, Threads, atau TikTok untuk mulai mengumpulkan ide.",
+    "emptyAction": "Tempel link",
+    "sheet": "Detail item",
+    "openSheet": "Buka item",
+    "sheetTitle": "Ramen Ichiran Shibuya",
+    "sheetBody": "Makanan · Hari 2 · 12.30 waktu setempat",
+    "dayLabel": "Hari {n}",
+    "dayUndated": "Belum ada tanggal",
+    "dayItems": "{count, plural, =0 {Belum ada item} other {# item}}"
+  }
+}

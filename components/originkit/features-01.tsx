@@ -3,14 +3,14 @@
 import "./process-01.css";
 import "./features-01.css";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { useState, type KeyboardEvent, type ReactNode } from "react";
 
 const A = "/originkit/features-01";
 
 type Feature = {
   id: string;
-  title: string;
-  description: string;
+  key: "together" | "itinerary" | "tours" | "references";
   icon: ReactNode;
   image: string;
 };
@@ -18,8 +18,7 @@ type Feature = {
 const FEATURES: Feature[] = [
   {
     id: "meetings",
-    title: "Plan together",
-    description: "Invite friends, comment and propose changes",
+    key: "together",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -50,8 +49,7 @@ const FEATURES: Feature[] = [
   },
   {
     id: "planning",
-    title: "Day-by-day itinerary",
-    description: "Drag places between days, even before dates are set",
+    key: "itinerary",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -75,8 +73,7 @@ const FEATURES: Feature[] = [
   },
   {
     id: "events",
-    title: "Tours and vouchers",
-    description: "Pickup times, stops and vouchers, available offline",
+    key: "tours",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -162,8 +159,7 @@ const FEATURES: Feature[] = [
   },
   {
     id: "integrations",
-    title: "References from socials",
-    description: "Save Instagram, Threads and TikTok finds into your plan",
+    key: "references",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -257,6 +253,7 @@ const FeatureTabVisual = ({
   feature: Feature;
   variant: "idle" | "active";
 }) => {
+  const t = useTranslations("Landing.features");
   const isActive = variant === "active";
 
   return (
@@ -275,7 +272,7 @@ const FeatureTabVisual = ({
 
       <span className="flex min-w-0 flex-col gap-1.25">
         <span className="text-[16px] font-medium leading-[1.1] tracking-[-0.01em] text-[#1e1e1e] iphone:text-base">
-          {feature.title}
+          {t(`${feature.key}.title`)}
         </span>
         <span
           className={`text-[13px] font-medium leading-[1.1] tracking-[-0.01em] iphone:text-[13px] ${
@@ -286,7 +283,7 @@ const FeatureTabVisual = ({
                 : "text-[#60605d]"
           }`}
         >
-          {feature.description}
+          {t(`${feature.key}.description`)}
         </span>
       </span>
     </>
@@ -302,10 +299,11 @@ const FeatureTabs = ({
   onSelect: (id: string) => void;
   onKeyDown: (event: KeyboardEvent<HTMLDivElement>) => void;
 }) => {
+  const t = useTranslations("Landing");
   return (
     <div
       role="tablist"
-      aria-label="Kazkir features"
+      aria-label={t("featuresLabel")}
       aria-orientation="vertical"
       onKeyDown={onKeyDown}
       className="relative flex w-full shrink-0 flex-col gap-2.5 py-1 pl-0 ipad-landscape:w-90.25 ipad-landscape:gap-3 ipad-landscape:py-1 ipad-landscape:pl-1"
@@ -349,6 +347,7 @@ const WIDGET_IMAGE_HEIGHT = 965;
 const FeaturePreview = ({ activeId }: { activeId: string }) => {
   const activeFeature =
     FEATURES.find((feature) => feature.id === activeId) ?? FEATURES[0];
+  const t = useTranslations("Landing.features");
 
   return (
     <div
@@ -377,7 +376,7 @@ const FeaturePreview = ({ activeId }: { activeId: string }) => {
           className="flex h-full w-full items-center justify-center animate-hero-reveal motion-reduce:animate-none [animation-duration:500ms] [animation-timing-function:cubic-bezier(0.23,1,0.32,1)]"
         >
           <Image
-            alt={activeFeature.title}
+            alt={t(`${activeFeature.key}.title`)}
             src={activeFeature.image}
             width={WIDGET_IMAGE_WIDTH}
             height={WIDGET_IMAGE_HEIGHT}
@@ -392,6 +391,7 @@ const FeaturePreview = ({ activeId }: { activeId: string }) => {
 };
 
 const Section7 = () => {
+  const t = useTranslations("Landing");
   const [activeId, setActiveId] = useState("planning");
 
   const handleSelectFeature = (nextId: string) => {
@@ -463,12 +463,10 @@ const Section7 = () => {
               id="potential-heading"
               className="animate-section-rise text-wrap text-[clamp(2rem,4vw,2.5rem)] font-medium leading-[1.12] tracking-[-0.04em] text-[#010110] motion-reduce:animate-none [animation-delay:0ms]"
             >
-              Every trip, planned together
+              {t("heading")}
             </h1>
-            <p className="animate-section-rise max-w-155 text-pretty text-[16px] font-medium leading-normal tracking-[-0.02em] text-[#45545e] iphone:text-base motion-reduce:animate-none [animation-delay:80ms]">
-              Stop juggling WhatsApp chats, screenshots and spreadsheets. Kazkir
-              <br className="hidden ipad:block" /> brings your itinerary, tours,
-              references and Rupiah budget into one place.
+            <p className="animate-section-rise max-w-155 text-balance text-[16px] font-medium leading-normal tracking-[-0.02em] text-[#45545e] iphone:text-base motion-reduce:animate-none [animation-delay:80ms]">
+              {t("subheading")}
             </p>
           </header>
 

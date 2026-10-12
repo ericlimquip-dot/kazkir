@@ -1,15 +1,17 @@
 @import "tailwindcss";
 @import "./originkit-section-theme.css";
 @import "./originkit-section-themes.css";
+@import "./kazkir-theme.css";
 
-@source "../components/originkit";
+@source "../components";
 
 html,
 body {
   background: #ffffff;
-  color: #010110;
+  color: var(--color-ink-strong);
 }
 
 body {
   font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
 }

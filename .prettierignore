@@ -1,0 +1,7 @@
+.next
+node_modules
+package-lock.json
+public
+components/originkit
+app/originkit-section-theme.css
+app/originkit-section-themes.css

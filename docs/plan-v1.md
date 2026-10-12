@@ -2,15 +2,15 @@
 
 Companion to [design.md](design.md). Each milestone ends with something you can open on your phone and try. Milestones run in order; tasks inside a milestone can mostly run in parallel.
 
-## M0 — Foundation (done / in progress)
+## M0 — Foundation (done)
 
 - [x] Next.js 16 + TypeScript 5 + Tailwind 4 project
 - [x] Originkit Features 01 landing section with Kazkir copy
-- [ ] Git repo + first commit
-- [ ] `app/kazkir-theme.css`: design tokens from design.md §8 (colours, shadows, radii, motion)
-- [ ] Shared UI primitives in `components/ui/` built from the Features 01 patterns: `Card`, `TabList` (vertical + horizontal), `IconTile`, `Button`, `Chip`, `Sheet` (bottom sheet on phone, side panel on laptop), `EmptyState` (warm gradient + dot grid)
-- [ ] i18n setup (EN + ID message files, locale switch)
-- [ ] ESLint + Prettier, Vitest, Playwright smoke test
+- [x] Git repo + first commit
+- [x] `app/kazkir-theme.css`: design tokens from design.md §8 (colours, shadows, radii, motion)
+- [x] Shared UI primitives in `components/ui/` built from the Features 01 patterns: `Card`, `TabList` (vertical + horizontal), `IconTile`, `Button`, `Chip`, `Sheet` (bottom sheet on phone, side panel on laptop), `EmptyState` (warm gradient + dot grid)
+- [x] i18n setup (EN + ID message files, locale switch)
+- [x] ESLint + Prettier, Vitest, Playwright smoke test
 
 **Done when:** landing page + a component gallery page render in both languages on phone and laptop.
 

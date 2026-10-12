@@ -221,7 +221,10 @@
         "other": "Lainnya"
       },
       "from": "Dari",
-      "to": "Ke"
+      "to": "Ke",
+      "approxPerPerson": "≈ {amount} per orang",
+      "approxShared": "≈ {amount} untuk satu grup",
+      "localCurrencyHint": "{currency} — mata uang setempat. Perkiraan Rupiah muncul saat kamu mengetik."
     },
     "more": "Detail lainnya",
     "save": "Simpan",

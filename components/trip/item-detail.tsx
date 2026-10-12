@@ -5,22 +5,11 @@ import { useState, useTransition, type ReactNode } from "react";
 import { deleteItem, setItemStatus } from "@/app/trips/[tripId]/item-actions";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
+import { formatIdr, formatMoney, toIdr } from "@/lib/money/format";
+import type { IdrRates } from "@/lib/money/rates";
 import { formatDate, shortTime } from "@/lib/trips/dates";
 import { ITEM_STATUSES, ITEM_TYPE_EMOJI, type Item, type ItemStatus } from "@/lib/trips/types";
 import { Vouchers } from "./vouchers";
-
-export function formatMoney(amount: number, currency: string, locale: string): string {
-  try {
-    return new Intl.NumberFormat(locale, {
-      style: "currency",
-      currency,
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 2,
-    }).format(amount);
-  } catch {
-    return `${amount} ${currency}`;
-  }
-}
 
 /** wa.me only accepts digits with the country code. */
 function whatsappLink(contact: string): string | null {
@@ -34,6 +23,7 @@ export function ItemDetail({
   dayLabel,
   canEdit,
   canContribute,
+  rates,
   onEdit,
   onDeleted,
   onChanged,
@@ -42,6 +32,7 @@ export function ItemDetail({
   dayLabel: string;
   canEdit: boolean;
   canContribute: boolean;
+  rates: IdrRates;
   onEdit: () => void;
   onDeleted: () => void;
   onChanged: () => void;
@@ -138,9 +129,10 @@ export function ItemDetail({
     );
   }
   if (item.cost_amount != null && item.cost_currency) {
+    const idr = toIdr(Number(item.cost_amount), item.cost_currency, rates);
     add(
       t("fields.cost"),
-      `${formatMoney(Number(item.cost_amount), item.cost_currency, locale)} · ${
+      `${formatMoney(Number(item.cost_amount), item.cost_currency, locale)}${idr !== null && item.cost_currency !== "IDR" ? ` (≈ ${formatIdr(idr)})` : ""} · ${
         item.cost_basis === "shared" ? t("fields.costShared") : t("fields.costBasis")
       }`,
     );

@@ -5,6 +5,8 @@ import { PlanBoard, type BoardDay } from "@/components/trip/plan-board";
 import { Chip } from "@/components/ui/chip";
 import { EmptyState } from "@/components/ui/empty-state";
 import { cn } from "@/lib/cn";
+import { COMMON_CURRENCIES } from "@/lib/money/format";
+import { getIdrRates, pickRates } from "@/lib/money/rates";
 import { createClient } from "@/lib/supabase/server";
 import { dateOfDay, endDateOf, formatDateRange, formatDayDate } from "@/lib/trips/dates";
 import { STAGE_TONE } from "@/lib/trips/stage";
@@ -35,7 +37,7 @@ export default async function TripPage({
   } = await supabase.auth.getUser();
   if (!user) redirect(`/login?next=/trips/${tripId}`);
 
-  const [tripRes, citiesRes, daysRes, itemsRes, roleRes] = await Promise.all([
+  const [tripRes, citiesRes, daysRes, itemsRes, roleRes, allRates] = await Promise.all([
     supabase
       .from("trips")
       .select("id, owner_id, title, stage, start_date, day_count, created_at")
@@ -50,6 +52,7 @@ export default async function TripPage({
       .eq("trip_id", tripId)
       .eq("user_id", user.id)
       .maybeSingle(),
+    getIdrRates(),
   ]);
   // RLS hides trips you're not a member of, so "not found" covers "not allowed" too.
   const trip = tripRes.data as Trip | null;
@@ -65,6 +68,11 @@ export default async function TripPage({
   const role = (roleRes.data?.role ?? "viewer") as MemberRole;
   const canEdit = role === "owner" || role === "editor";
   const canContribute = canEdit || role === "contributor";
+  const rates = pickRates(allRates, [
+    ...cities.map((c) => c.currency),
+    ...items.map((i) => i.cost_currency).filter((c): c is string => !!c),
+    ...COMMON_CURRENCIES,
+  ]);
   const boardDays: BoardDay[] = days.map((day) => {
     const date = dateOfDay(trip.start_date, day.day_index);
     const city = day.city_id ? cityById.get(day.city_id) : undefined;
@@ -132,6 +140,7 @@ export default async function TripPage({
             canEdit={canEdit}
             canContribute={canContribute}
             fallbackCurrency={cities[0]?.currency ?? "IDR"}
+            rates={rates}
           />
         ) : (
           <EmptyState title={t(`tabs.${tab}`)} description={t("comingSoon")} />

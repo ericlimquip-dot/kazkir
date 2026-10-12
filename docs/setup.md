@@ -73,3 +73,6 @@ Vercel is unaffected.
 - City suggestions: [`city-timezones`](https://www.npmjs.com/package/city-timezones) (MIT), built on
   simplemaps World Cities Basic (CC BY 4.0). About 7,300 cities; smaller towns are typed by hand.
 - Countries/time zones: `countries-and-timezones` (MIT); currencies: `country-to-currency` (MIT).
+- Exchange rates: [ExchangeRate-API open access](https://www.exchangerate-api.com/docs/free)
+  (`open.er-api.com`, no key, daily, attribution requested). Fetched server-side, cached 12 h; if it's
+  unreachable the app hides Rupiah estimates instead of failing.

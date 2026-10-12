@@ -4,6 +4,9 @@ import { useTranslations } from "next-intl";
 import { useId, useState, useTransition, type FormEvent, type ReactNode } from "react";
 import { saveItem } from "@/app/trips/[tripId]/item-actions";
 import { Button } from "@/components/ui/button";
+import { COMMON_CURRENCIES, parseAmount } from "@/lib/money/format";
+import type { IdrRates } from "@/lib/money/rates";
+import { CostField } from "./cost-field";
 import { cn } from "@/lib/cn";
 import { MAX_TOUR_STOPS, TRANSPORT_MODES } from "@/lib/trips/item-schema";
 import {
@@ -75,6 +78,7 @@ export function ItemForm({
   defaultDayId,
   days,
   fallbackCurrency,
+  rates,
   onSaved,
   onCancel,
 }: {
@@ -83,12 +87,19 @@ export function ItemForm({
   defaultDayId: string | null;
   days: DayOption[];
   fallbackCurrency: string;
+  rates: IdrRates;
   onSaved: (id: string) => void;
   onCancel: () => void;
 }) {
   const t = useTranslations("Item");
   const currencyFor = (dayId: string | null) =>
     days.find((d) => d.id === dayId)?.currency ?? fallbackCurrency;
+  const currencyOptions = [
+    ...new Set([
+      ...days.map((d) => d.currency).filter((c): c is string => !!c),
+      ...COMMON_CURRENCIES,
+    ]),
+  ];
   const [draft, setDraft] = useState<Draft | null>(
     item ? draftFrom(item, item.type, item.day_id, currencyFor(item.day_id)) : null,
   );
@@ -146,8 +157,12 @@ export function ItemForm({
         startTime: draft.startTime,
         endTime: draft.endTime,
         location: draft.location,
-        costAmount: draft.costAmount,
-        costCurrency: draft.costAmount ? draft.costCurrency : "",
+        // "25.000" means twenty-five thousand here; send a plain number (or the raw text so
+        // validation can flag it).
+        costAmount: draft.costAmount.trim()
+          ? (parseAmount(draft.costAmount) ?? draft.costAmount)
+          : "",
+        costCurrency: draft.costAmount.trim() ? draft.costCurrency : "",
         costBasis: draft.costBasis,
         notes: draft.notes,
         details,
@@ -190,7 +205,14 @@ export function ItemForm({
               id={id}
               className={INPUT}
               value={draft.dayId}
-              onChange={(e) => set({ dayId: e.target.value })}
+              onChange={(e) =>
+                set({
+                  dayId: e.target.value,
+                  ...(draft.costAmount
+                    ? {}
+                    : { costCurrency: currencyFor(e.target.value || null) }),
+                })
+              }
             >
               <option value="">{t("fields.wishlist")}</option>
               {days.map((d) => (
@@ -440,49 +462,16 @@ export function ItemForm({
       ) : null}
 
       {type !== "note" ? (
-        <fieldset className="flex flex-col gap-2">
-          <legend className="mb-1.5 text-[13px] font-medium text-muted">{t("fields.cost")}</legend>
-          <div className="flex gap-2">
-            <input
-              aria-label={t("fields.cost")}
-              type="number"
-              inputMode="decimal"
-              min={0}
-              step="any"
-              className={cn(INPUT, "flex-1", bad("costAmount") && "border-[#e3a091]")}
-              value={draft.costAmount}
-              onChange={(e) => set({ costAmount: e.target.value })}
-            />
-            <input
-              aria-label={t("fields.currency")}
-              className={cn(INPUT, "w-24 uppercase", bad("costCurrency") && "border-[#e3a091]")}
-              value={draft.costCurrency}
-              maxLength={3}
-              onChange={(e) =>
-                set({ costCurrency: e.target.value.toUpperCase().replace(/[^A-Z]/g, "") })
-              }
-            />
-          </div>
-          <div role="radiogroup" className="inline-flex gap-1 self-start rounded-xl bg-hover p-1">
-            {(["per_person", "shared"] as const).map((basis) => (
-              <button
-                key={basis}
-                type="button"
-                role="radio"
-                aria-checked={draft.costBasis === basis}
-                onClick={() => set({ costBasis: basis })}
-                className={cn(
-                  "min-h-9 cursor-pointer rounded-lg border px-3 text-[13px] font-medium",
-                  draft.costBasis === basis
-                    ? "border-sky-300 bg-sky-100 text-ink"
-                    : "border-transparent text-muted-grey",
-                )}
-              >
-                {basis === "per_person" ? t("fields.costBasis") : t("fields.costShared")}
-              </button>
-            ))}
-          </div>
-        </fieldset>
+        <CostField
+          amount={draft.costAmount}
+          currency={draft.costCurrency}
+          basis={draft.costBasis}
+          currencies={currencyOptions}
+          localCurrency={days.find((d) => d.id === draft.dayId)?.currency ?? null}
+          rates={rates}
+          invalid={bad("costAmount") || bad("costCurrency")}
+          onChange={(patch) => set(patch)}
+        />
       ) : null}
 
       <Field label={t("fields.notes")}>

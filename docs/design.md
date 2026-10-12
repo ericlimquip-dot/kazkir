@@ -189,5 +189,6 @@ Row-level security on every table: access only through `trip_members`; write rig
 
 - **v1:** trips & days (undated), all item types incl. tours with stops & vouchers, references + Find place, tips board, invites & roles, comments + trip thread, voting, drag-and-drop planning, offline mode, reminders + calendar export, Open in… maps, EN/ID.
 - **v1** also includes the proposals workflow (moved from v1.1 on 2026-10-12).
-- **v1.1:** budget estimates + rate override, bill splitting + settle-up.
+- **v1** also shows a live Rupiah estimate for every cost (daily rate, ExchangeRate-API) — added 2026-10-13.
+- **v1.1:** trip budget totals + owner rate override, bill splitting + settle-up.
 - **v2:** maps view, public read-only web viewer, AI place detection, booking-email parsing, native store wrapper.

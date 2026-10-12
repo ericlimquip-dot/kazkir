@@ -114,6 +114,7 @@ export function PlanDemo() {
       canEdit
       canContribute
       fallbackCurrency="KZT"
+      rates={{ KZT: 39.48, KGS: 207.25, USD: 17860, EUR: 20000, IDR: 1 }}
     />
   );
 }

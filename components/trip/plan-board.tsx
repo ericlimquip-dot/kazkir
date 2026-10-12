@@ -8,7 +8,9 @@ import { IconTile } from "@/components/ui/icon-tile";
 import { Sheet } from "@/components/ui/sheet";
 import { shortTime } from "@/lib/trips/dates";
 import { ITEM_TYPE_EMOJI, type Item, type ItemStatus } from "@/lib/trips/types";
-import { formatMoney, ItemDetail } from "./item-detail";
+import { formatIdr, formatMoney, toIdr } from "@/lib/money/format";
+import type { IdrRates } from "@/lib/money/rates";
+import { ItemDetail } from "./item-detail";
 import { ItemForm, type DayOption } from "./item-form";
 
 export type BoardDay = {
@@ -42,6 +44,7 @@ export function PlanBoard({
   canEdit,
   canContribute,
   fallbackCurrency,
+  rates,
 }: {
   tripId: string;
   days: BoardDay[];
@@ -49,6 +52,7 @@ export function PlanBoard({
   canEdit: boolean;
   canContribute: boolean;
   fallbackCurrency: string;
+  rates: IdrRates;
 }) {
   const t = useTranslations("Item");
   const tTrip = useTranslations("Trip");
@@ -122,6 +126,7 @@ export function PlanBoard({
                 key={item.id}
                 item={item}
                 statusLabel={t(`status.${item.status}`)}
+                rates={rates}
                 onOpen={() => setSheet({ kind: "view", id: item.id })}
               />
             ))}
@@ -178,6 +183,7 @@ export function PlanBoard({
                       key={item.id}
                       item={item}
                       statusLabel={t(`status.${item.status}`)}
+                      rates={rates}
                       onOpen={() => setSheet({ kind: "view", id: item.id })}
                     />
                   ))}
@@ -202,6 +208,7 @@ export function PlanBoard({
             defaultDayId={sheet.dayId}
             days={dayOptions}
             fallbackCurrency={fallbackCurrency}
+            rates={rates}
             onSaved={() => {
               close();
               refresh();
@@ -217,6 +224,7 @@ export function PlanBoard({
             defaultDayId={current.day_id}
             days={dayOptions}
             fallbackCurrency={fallbackCurrency}
+            rates={rates}
             onSaved={(id) => {
               setSheet({ kind: "view", id });
               refresh();
@@ -233,6 +241,7 @@ export function PlanBoard({
             }
             canEdit={canEdit}
             canContribute={canContribute}
+            rates={rates}
             onEdit={() => setSheet({ kind: "edit", id: current.id })}
             onDeleted={() => {
               close();
@@ -261,21 +270,28 @@ function AddButton({ label, onClick }: { label: string; onClick: () => void }) {
 function ItemRow({
   item,
   statusLabel,
+  rates,
   onOpen,
 }: {
   item: Item;
   statusLabel: string;
+  rates: IdrRates;
   onOpen: () => void;
 }) {
   const locale = useLocale();
   const start = shortTime(item.start_time);
   const end = shortTime(item.end_time);
+  // Rupiah first: it's what the group budgets in; the local price stays for paying on the spot.
+  let cost: string | null = null;
+  if (item.cost_amount != null && item.cost_currency) {
+    const local = formatMoney(Number(item.cost_amount), item.cost_currency, locale);
+    const idr = toIdr(Number(item.cost_amount), item.cost_currency, rates);
+    cost = idr !== null && item.cost_currency !== "IDR" ? `≈ ${formatIdr(idr)} (${local})` : local;
+  }
   const meta = [
     start ? (end ? `${start}–${end}` : start) : null,
     typeof item.details.location === "string" ? item.details.location : null,
-    item.cost_amount != null && item.cost_currency
-      ? formatMoney(Number(item.cost_amount), item.cost_currency, locale)
-      : null,
+    cost,
   ].filter(Boolean);
 
   return (

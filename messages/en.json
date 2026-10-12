@@ -221,7 +221,10 @@
         "other": "Other"
       },
       "from": "From",
-      "to": "To"
+      "to": "To",
+      "approxPerPerson": "≈ {amount} per person",
+      "approxShared": "≈ {amount} for the group",
+      "localCurrencyHint": "{currency} — the local currency. Rupiah estimate appears as you type."
     },
     "more": "More details",
     "save": "Save",

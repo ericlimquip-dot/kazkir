@@ -5,3 +5,5 @@ public
 components/originkit
 app/originkit-section-theme.css
 app/originkit-section-themes.css
+supabase/tests
+scripts

@@ -58,5 +58,37 @@
     "dayLabel": "Day {n}",
     "dayUndated": "No date yet",
     "dayItems": "{count, plural, =0 {No items} one {# item} other {# items}}"
+  },
+  "Auth": {
+    "tagline": "Plan trips abroad together.",
+    "google": "Continue with Google",
+    "or": "or",
+    "email": "Email",
+    "sendLink": "Email me a sign-in link",
+    "sending": "Sending…",
+    "checkEmail": "Check your email",
+    "sentTo": "We sent a sign-in link to {email}.",
+    "error": "Something went wrong. Please try again.",
+    "callbackError": "That sign-in link didn't work or has expired. Please try again."
+  },
+  "Trips": {
+    "title": "Your trips",
+    "signedInAs": "Signed in as {name}",
+    "signOut": "Sign out",
+    "emptyTitle": "No trips yet",
+    "emptyDescription": "Creating trips arrives in the next milestone."
+  },
+  "Install": {
+    "title": "Add Kazkir to your home screen",
+    "iosStep1": "Tap the Share button in Safari",
+    "iosStep2": "Choose “Add to Home Screen”",
+    "iosStep3": "Open Kazkir from your home screen to get reminders",
+    "androidBody": "Install Kazkir to share links into it and get reminders.",
+    "install": "Install",
+    "later": "Later"
+  },
+  "Offline": {
+    "title": "You're offline",
+    "description": "Saved trips will open here once offline mode is ready. Reconnect to continue."
   }
 }

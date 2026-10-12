@@ -58,5 +58,37 @@
     "dayLabel": "Hari {n}",
     "dayUndated": "Belum ada tanggal",
     "dayItems": "{count, plural, =0 {Belum ada item} other {# item}}"
+  },
+  "Auth": {
+    "tagline": "Rencanakan perjalanan ke luar negeri bersama.",
+    "google": "Lanjutkan dengan Google",
+    "or": "atau",
+    "email": "Email",
+    "sendLink": "Kirim link masuk ke email saya",
+    "sending": "Mengirim…",
+    "checkEmail": "Cek email kamu",
+    "sentTo": "Kami sudah mengirim link masuk ke {email}.",
+    "error": "Ada yang salah. Silakan coba lagi.",
+    "callbackError": "Link masuk tidak berlaku atau sudah kedaluwarsa. Silakan coba lagi."
+  },
+  "Trips": {
+    "title": "Perjalananmu",
+    "signedInAs": "Masuk sebagai {name}",
+    "signOut": "Keluar",
+    "emptyTitle": "Belum ada perjalanan",
+    "emptyDescription": "Fitur membuat perjalanan hadir di tahap berikutnya."
+  },
+  "Install": {
+    "title": "Tambahkan Kazkir ke layar utama",
+    "iosStep1": "Ketuk tombol Bagikan di Safari",
+    "iosStep2": "Pilih “Tambah ke Layar Utama”",
+    "iosStep3": "Buka Kazkir dari layar utama agar dapat pengingat",
+    "androidBody": "Pasang Kazkir agar bisa membagikan link ke dalamnya dan menerima pengingat.",
+    "install": "Pasang",
+    "later": "Nanti"
+  },
+  "Offline": {
+    "title": "Kamu sedang offline",
+    "description": "Perjalanan yang tersimpan akan bisa dibuka di sini setelah mode offline siap. Sambungkan internet untuk melanjutkan."
   }
 }

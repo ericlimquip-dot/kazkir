@@ -31,3 +31,12 @@ test("gallery opens and closes the item sheet", async ({ page }) => {
   await page.keyboard.press("Escape");
   await expect(sheet).toBeHidden();
 });
+
+test("city search fills in the country and time zone", async ({ page }) => {
+  await page.goto("/gallery");
+  const box = page.getByRole("combobox", { name: "City" });
+  await box.fill("bish");
+  await page.getByRole("option", { name: /Bishkek/ }).click();
+  await expect(box).toHaveValue("Bishkek");
+  await expect(page.getByTestId("picked-city")).toHaveText("KG · Asia/Bishkek");
+});

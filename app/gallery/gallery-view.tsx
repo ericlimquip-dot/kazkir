@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useState, type ReactNode } from "react";
+import { CityCombobox } from "@/components/city-combobox";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -17,6 +18,8 @@ export function GalleryView() {
   const [day, setDay] = useState("day-1");
   const [tab, setTab] = useState("plan");
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [city, setCity] = useState("");
+  const [picked, setPicked] = useState("");
 
   const days = [
     { id: "day-1", n: 1, icon: "🏙️", count: 4 },
@@ -86,6 +89,27 @@ export function GalleryView() {
               items={days}
             />
           </Card>
+        </Section>
+
+        <Section title="City search">
+          <div className="flex max-w-100 flex-col gap-2">
+            <CityCombobox
+              label="City"
+              value={city}
+              country=""
+              placeholder="Almaty"
+              countryName={(code) => code}
+              onChange={setCity}
+              onPick={(c) => {
+                setCity(c.name);
+                setPicked(`${c.countryCode} · ${c.timezone}`);
+              }}
+              className="min-h-11 w-full rounded-xl border border-line bg-white px-3 text-[16px] text-ink outline-none focus:border-sky-300 focus:ring-2 focus:ring-sky-100"
+            />
+            <p data-testid="picked-city" className="text-[13px] font-medium text-muted">
+              {picked}
+            </p>
+          </div>
         </Section>
 
         <Section title={t("empty")}>

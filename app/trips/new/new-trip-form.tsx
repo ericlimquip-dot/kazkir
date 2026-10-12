@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useId, useState, useTransition, type FormEvent, type ReactNode } from "react";
+import { CityCombobox } from "@/components/city-combobox";
 import { Button } from "@/components/ui/button";
 import type { CountryOption } from "@/lib/geo/countries";
 import { cn } from "@/lib/cn";
@@ -70,16 +71,27 @@ export function NewTripForm({ countries }: { countries: CountryOption[] }) {
               className="flex flex-col gap-2 rounded-2xl border border-line bg-white p-3"
             >
               <div className="flex items-center gap-2">
-                <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-sky-100 text-[13px] font-medium text-muted-teal">
+                <span
+                  aria-hidden="true"
+                  className="flex h-7 w-7 min-w-7 shrink-0 items-center justify-center rounded-full bg-sky-100 text-[13px] font-medium text-muted-teal"
+                >
                   {index + 1}
                 </span>
-                <input
-                  aria-label={t("city")}
+                <CityCombobox
+                  label={t("city")}
                   className={INPUT}
                   value={city.name}
-                  maxLength={80}
+                  country={city.countryCode}
                   placeholder={t("cityPlaceholder")}
-                  onChange={(e) => updateCity(city.key, { name: e.target.value })}
+                  countryName={(code) => byCode.get(code)?.name ?? code}
+                  onChange={(name) => updateCity(city.key, { name })}
+                  onPick={(picked) =>
+                    updateCity(city.key, {
+                      name: picked.name,
+                      countryCode: picked.countryCode,
+                      timezone: picked.timezone,
+                    })
+                  }
                 />
                 {cities.length > 1 ? (
                   <button
@@ -141,8 +153,8 @@ export function NewTripForm({ countries }: { countries: CountryOption[] }) {
                 {
                   key: Math.max(...list.map((c) => c.key)) + 1,
                   name: "",
-                  countryCode: list.at(-1)?.countryCode ?? "",
-                  timezone: list.at(-1)?.timezone ?? "",
+                  countryCode: "",
+                  timezone: "",
                 },
               ])
             }

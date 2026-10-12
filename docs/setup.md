@@ -67,3 +67,9 @@ it (it's in the Windows store) but Node.js doesn't, so server-side calls to Supa
 Node with `--use-system-ca`, which keeps certificate checks on but uses the Windows trust store.
 Diagnose with `node scripts/net-check.mjs` (and `node --use-system-ca scripts/net-check.mjs`).
 Vercel is unaffected.
+
+## Third-party data
+
+- City suggestions: [`city-timezones`](https://www.npmjs.com/package/city-timezones) (MIT), built on
+  simplemaps World Cities Basic (CC BY 4.0). About 7,300 cities; smaller towns are typed by hand.
+- Countries/time zones: `countries-and-timezones` (MIT); currencies: `country-to-currency` (MIT).

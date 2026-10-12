@@ -1,0 +1,15 @@
+@import "tailwindcss";
+@import "./originkit-section-theme.css";
+@import "./originkit-section-themes.css";
+
+@source "../components/originkit";
+
+html,
+body {
+  background: #ffffff;
+  color: #010110;
+}
+
+body {
+  font-family: var(--font-sans);
+}

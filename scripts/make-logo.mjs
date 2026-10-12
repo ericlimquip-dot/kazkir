@@ -1,0 +1,33 @@
+// Kazkir logo files in the Features 01 palette. Run: node scripts/make-logo.mjs
+import sharp from "sharp";
+import { writeFileSync } from "node:fs";
+
+const mark = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f6c76b"/>
+      <stop offset="0.5" stop-color="#fdf3e1"/>
+      <stop offset="1" stop-color="#bce7f8"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#g)"/>
+  <rect x="96" y="96" width="320" height="320" rx="72" fill="#ffffff" stroke="#9bd3e9" stroke-width="10"/>
+  <path d="M196 170 v172 M196 262 l92 -92 M222 236 l72 106" stroke="#1e1e1e" stroke-width="30" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <circle cx="330" cy="186" r="16" fill="#90d7f3"/>
+</svg>`;
+
+const wordmark = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 360">
+  <g transform="translate(40 40) scale(0.5625)">${mark.replace(/^<svg[^>]*>|<\/svg>$/g, "")}</g>
+  <text x="380" y="232" font-family="Inter, 'Segoe UI', Arial, sans-serif" font-size="168" font-weight="500" letter-spacing="-6" fill="#010110">Kazkir</text>
+</svg>`;
+
+writeFileSync("public/brand/kazkir-mark.svg", mark);
+writeFileSync("public/brand/kazkir-wordmark.svg", wordmark);
+
+// Google consent screen wants a square image, 120x120, on a solid background.
+const square = mark.replace('rx="112" fill="url(#g)"', 'fill="url(#g)"');
+for (const size of [120, 512, 1024]) {
+  await sharp(Buffer.from(square)).resize(size, size).png().toFile(`public/brand/kazkir-logo-${size}.png`);
+}
+await sharp(Buffer.from(wordmark)).resize(1200, 360).flatten({ background: "#ffffff" }).png().toFile("public/brand/kazkir-wordmark.png");
+console.log("done");

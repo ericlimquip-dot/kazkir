@@ -45,3 +45,12 @@ create trigger trip_cities_fill_days
   for each row execute function public.fill_day_cities();
 
 revoke execute on function public.fill_day_cities() from public, anon, authenticated;
+
+-- Backfill: trips created before this migration have no day rows yet.
+insert into public.days (trip_id, day_index, city_id)
+select t.id, g.i, (
+  select c.id from public.trip_cities c where c.trip_id = t.id order by c.sort_key, c.id limit 1
+)
+from public.trips t
+cross join lateral generate_series(1, t.day_count) as g(i)
+on conflict (trip_id, day_index) do nothing;

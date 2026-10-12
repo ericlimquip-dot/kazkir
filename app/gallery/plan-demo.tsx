@@ -114,6 +114,8 @@ export function PlanDemo() {
       canEdit
       canContribute
       fallbackCurrency="KZT"
+      startDate="2027-05-01"
+      fallbackTimezone="Asia/Almaty"
       rates={{ KZT: 39.48, KGS: 207.25, USD: 17860, EUR: 20000, IDR: 1 }}
     />
   );

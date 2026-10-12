@@ -224,7 +224,14 @@
       "to": "Ke",
       "approxPerPerson": "≈ {amount} per orang",
       "approxShared": "≈ {amount} untuk satu grup",
-      "localCurrencyHint": "{currency} — mata uang setempat. Perkiraan Rupiah muncul saat kamu mengetik."
+      "localCurrencyHint": "{currency} — mata uang setempat. Perkiraan Rupiah muncul saat kamu mengetik.",
+      "arriveDay": "Tiba",
+      "arriveDayOptions": {
+        "0": "Hari yang sama",
+        "1": "Besoknya (+1)",
+        "2": "2 hari kemudian (+2)"
+      },
+      "checkOutOn": "Check-out: {date}"
     },
     "more": "Detail lainnya",
     "save": "Simpan",
@@ -250,6 +257,15 @@
       "forbidden": "Kamu tidak punya izin mengubah perjalanan ini.",
       "failed": "Gagal menyimpan. Periksa koneksi lalu coba lagi."
     },
-    "photo": "Foto"
+    "photo": "Foto",
+    "when": {
+      "when": "Waktu",
+      "departs": "Berangkat",
+      "arrives": "Tiba",
+      "checkIn": "Check-in",
+      "checkOut": "Check-out",
+      "pickup": "Jemput"
+    },
+    "autoDone": "Otomatis ditandai selesai — sudah berakhir {when}."
   }
 }

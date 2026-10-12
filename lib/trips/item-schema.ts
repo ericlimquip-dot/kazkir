@@ -40,6 +40,8 @@ export const DETAILS_SCHEMAS = {
     departTerminal: optionalText(20),
     arriveTerminal: optionalText(20),
     bookingCode: optionalText(40),
+    // Overnight flights land the next day (or the one after, for long hauls).
+    arriveDayOffset: z.coerce.number().int().min(0).max(2).optional(),
   }),
   stay: z.object({
     nights: z.coerce.number().int().min(1).max(90).default(1),

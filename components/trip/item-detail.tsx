@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
 import { formatIdr, formatMoney, toIdr } from "@/lib/money/format";
 import type { IdrRates } from "@/lib/money/rates";
-import { formatDate, shortTime } from "@/lib/trips/dates";
+import { formatDate } from "@/lib/trips/dates";
+import { whenRows } from "@/lib/trips/when";
 import { ITEM_STATUSES, ITEM_TYPE_EMOJI, type Item, type ItemStatus } from "@/lib/trips/types";
 import { Vouchers } from "./vouchers";
 
@@ -21,6 +22,9 @@ function whatsappLink(contact: string): string | null {
 export function ItemDetail({
   item,
   dayLabel,
+  dayIndex,
+  dayTitleAt,
+  autoDone,
   canEdit,
   canContribute,
   rates,
@@ -30,6 +34,9 @@ export function ItemDetail({
 }: {
   item: Item;
   dayLabel: string;
+  dayIndex: number | null;
+  dayTitleAt: (n: number) => string;
+  autoDone: boolean;
   canEdit: boolean;
   canContribute: boolean;
   rates: IdrRates;
@@ -40,7 +47,7 @@ export function ItemDetail({
   const t = useTranslations("Item");
   const locale = useLocale();
   const [pending, startTransition] = useTransition();
-  const [status, setStatus] = useState<ItemStatus>(item.status);
+  const [status, setStatus] = useState<ItemStatus>(autoDone ? "done" : item.status);
   const [error, setError] = useState<string | null>(null);
   const d = item.details as Record<
     string,
@@ -70,8 +77,6 @@ export function ItemDetail({
     });
   };
 
-  const start = shortTime(item.start_time);
-  const end = shortTime(item.end_time);
   const contact = text("contact");
   const wa = contact ? whatsappLink(contact) : null;
   const stops = Array.isArray(d.stops) ? d.stops : [];
@@ -80,8 +85,13 @@ export function ItemDetail({
   const add = (label: string, value: ReactNode | undefined) => {
     if (value !== undefined && value !== "") rows.push([label, value]);
   };
-  add(t("fields.day"), dayLabel);
-  add(t("fields.startTime"), start && end ? `${start} – ${end}` : (start ?? undefined));
+  // Every time comes with its date: "Day 2 · Sun, 2 May · 12:00".
+  const moments = whenRows(item, dayIndex);
+  if (moments.length === 0) add(t("fields.day"), dayLabel);
+  for (const m of moments) {
+    add(t(`when.${m.kind}`), `${dayTitleAt(m.dayIndex)}${m.time ? ` · ${m.time}` : ""}`);
+  }
+  const lastMoment = moments.at(-1);
   add(t("fields.location"), text("location"));
   if (item.type === "flight") {
     const route = [text("fromAirport"), text("toAirport")].filter(Boolean).join(" → ");
@@ -92,12 +102,9 @@ export function ItemDetail({
   }
   if (item.type === "stay") {
     add(t("fields.nights"), text("nights"));
-    add(t("fields.checkInTime"), text("checkInTime"));
-    add(t("fields.checkOutTime"), text("checkOutTime"));
   }
   if (item.type === "tour") {
     add(t("fields.operator"), text("operator"));
-    add(t("fields.pickupTime"), text("pickupTime"));
     add(t("fields.pickupPlace"), text("pickupPlace"));
     add(t("fields.inclusions"), text("inclusions"));
     add(t("fields.cancelBy"), text("cancelBy") && formatDate(text("cancelBy")!, locale));
@@ -146,6 +153,14 @@ export function ItemDetail({
         </span>
         {t(`types.${item.type}`)}
       </div>
+
+      {autoDone && lastMoment ? (
+        <p className="rounded-2xl bg-[#ecf8ef] px-3 py-2 text-[13px] font-medium text-[#2f6b3f]">
+          {t("autoDone", {
+            when: `${dayTitleAt(lastMoment.dayIndex)}${lastMoment.time ? ` · ${lastMoment.time.split("–").pop()}` : ""}`,
+          })}
+        </p>
+      ) : null}
 
       <div
         role="radiogroup"

@@ -2,11 +2,12 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Chip, type ChipTone } from "@/components/ui/chip";
 import { IconTile } from "@/components/ui/icon-tile";
 import { Sheet } from "@/components/ui/sheet";
-import { shortTime } from "@/lib/trips/dates";
+import { dateOfDay, formatDayDate, shortTime } from "@/lib/trips/dates";
+import { effectiveStatus } from "@/lib/trips/when";
 import { ITEM_TYPE_EMOJI, type Item, type ItemStatus } from "@/lib/trips/types";
 import { formatIdr, formatMoney, toIdr } from "@/lib/money/format";
 import type { IdrRates } from "@/lib/money/rates";
@@ -45,6 +46,8 @@ export function PlanBoard({
   canContribute,
   fallbackCurrency,
   rates,
+  startDate,
+  fallbackTimezone,
 }: {
   tripId: string;
   days: BoardDay[];
@@ -53,20 +56,43 @@ export function PlanBoard({
   canContribute: boolean;
   fallbackCurrency: string;
   rates: IdrRates;
+  startDate: string | null;
+  fallbackTimezone: string;
 }) {
   const t = useTranslations("Item");
   const tTrip = useTranslations("Trip");
   const router = useRouter();
   const [sheet, setSheet] = useState<SheetState>({ kind: "closed" });
+  const locale = useLocale();
+  // Re-evaluated every minute so items flip to "done" as their end time passes.
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    const timer = setInterval(() => setNow(Date.now()), 60_000);
+    return () => clearInterval(timer);
+  }, []);
 
   const close = () => setSheet({ kind: "closed" });
   const refresh = () => router.refresh();
 
   const dayOptions: DayOption[] = days.map((d) => ({
     id: d.id,
+    dayIndex: d.dayIndex,
     label: d.title,
     currency: d.currency,
   }));
+  /** "Day 3 · Mon, 3 May", also past the trip's last day (stay check-outs, overnight arrivals). */
+  const dayTitleAt = (n: number) => {
+    const date = dateOfDay(startDate, n);
+    return date ? `${tTrip("day", { n })} · ${formatDayDate(date, locale)}` : tTrip("day", { n });
+  };
+  const statusOf = (item: Item) =>
+    effectiveStatus(
+      item,
+      item.day_id ? (dayById.get(item.day_id)?.dayIndex ?? null) : null,
+      startDate,
+      now,
+      fallbackTimezone,
+    );
   const dayById = new Map(days.map((d) => [d.id, d]));
   const dayByIndex = new Map(days.map((d) => [d.dayIndex, d]));
 
@@ -79,7 +105,11 @@ export function PlanBoard({
     for (let j = 1; j <= nights; j++) {
       const day = dayByIndex.get(start.dayIndex + j);
       if (!day) break;
-      const label = j < nights ? t("night", { n: j + 1, total: nights }) : t("checkOut");
+      const checkOutTime = (item.details as { checkOutTime?: string }).checkOutTime;
+      const label =
+        j < nights
+          ? t("night", { n: j + 1, total: nights })
+          : `${t("checkOut")}${checkOutTime ? ` ${checkOutTime}` : ""}`;
       continuations.set(day.id, [...(continuations.get(day.id) ?? []), { item, label }]);
     }
   }
@@ -125,7 +155,8 @@ export function PlanBoard({
               <ItemRow
                 key={item.id}
                 item={item}
-                statusLabel={t(`status.${item.status}`)}
+                status={statusOf(item).status}
+                statusLabel={t(`status.${statusOf(item).status}`)}
                 rates={rates}
                 onOpen={() => setSheet({ kind: "view", id: item.id })}
               />
@@ -182,7 +213,8 @@ export function PlanBoard({
                     <ItemRow
                       key={item.id}
                       item={item}
-                      statusLabel={t(`status.${item.status}`)}
+                      status={statusOf(item).status}
+                      statusLabel={t(`status.${statusOf(item).status}`)}
                       rates={rates}
                       onOpen={() => setSheet({ kind: "view", id: item.id })}
                     />
@@ -209,6 +241,7 @@ export function PlanBoard({
             days={dayOptions}
             fallbackCurrency={fallbackCurrency}
             rates={rates}
+            dayTitleAt={dayTitleAt}
             onSaved={() => {
               close();
               refresh();
@@ -225,6 +258,7 @@ export function PlanBoard({
             days={dayOptions}
             fallbackCurrency={fallbackCurrency}
             rates={rates}
+            dayTitleAt={dayTitleAt}
             onSaved={(id) => {
               setSheet({ kind: "view", id });
               refresh();
@@ -236,6 +270,9 @@ export function PlanBoard({
           <ItemDetail
             key={`view-${current.id}-${current.status}`}
             item={current}
+            dayIndex={current.day_id ? (dayById.get(current.day_id)?.dayIndex ?? null) : null}
+            dayTitleAt={dayTitleAt}
+            autoDone={statusOf(current).auto}
             dayLabel={
               current.day_id ? (dayById.get(current.day_id)?.title ?? "") : tTrip("wishlist")
             }
@@ -269,11 +306,13 @@ function AddButton({ label, onClick }: { label: string; onClick: () => void }) {
 
 function ItemRow({
   item,
+  status,
   statusLabel,
   rates,
   onOpen,
 }: {
   item: Item;
+  status: ItemStatus;
   statusLabel: string;
   rates: IdrRates;
   onOpen: () => void;
@@ -312,7 +351,7 @@ function ItemRow({
             </span>
           ) : null}
         </span>
-        <Chip tone={STATUS_TONE[item.status]} className="shrink-0">
+        <Chip tone={STATUS_TONE[status]} className="shrink-0">
           {statusLabel}
         </Chip>
       </button>

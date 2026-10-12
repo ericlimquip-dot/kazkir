@@ -21,7 +21,7 @@ import {
 export const INPUT =
   "min-h-11 w-full rounded-xl border border-line bg-white px-3 text-[16px] text-ink outline-none focus:border-sky-300 focus:ring-2 focus:ring-sky-100";
 
-export type DayOption = { id: string; label: string; currency: string | null };
+export type DayOption = { id: string; dayIndex: number; label: string; currency: string | null };
 
 type Stop = { key: number; time: string; name: string; note: string };
 
@@ -79,6 +79,7 @@ export function ItemForm({
   days,
   fallbackCurrency,
   rates,
+  dayTitleAt,
   onSaved,
   onCancel,
 }: {
@@ -88,6 +89,7 @@ export function ItemForm({
   days: DayOption[];
   fallbackCurrency: string;
   rates: IdrRates;
+  dayTitleAt: (n: number) => string;
   onSaved: (id: string) => void;
   onCancel: () => void;
 }) {
@@ -173,6 +175,7 @@ export function ItemForm({
   };
 
   const type = draft.type;
+  const selectedDay = days.find((d) => d.id === draft.dayId);
 
   return (
     <form onSubmit={submit} className="flex flex-col gap-4" noValidate>
@@ -309,6 +312,24 @@ export function ItemForm({
             draft={draft}
             setDetail={setDetail}
           />
+          <div className="col-span-2">
+            <Field label={t("fields.arriveDay")}>
+              {(id) => (
+                <select
+                  id={id}
+                  className={INPUT}
+                  value={draft.details.arriveDayOffset ?? "0"}
+                  onChange={(e) => setDetail("arriveDayOffset", e.target.value)}
+                >
+                  {(["0", "1", "2"] as const).map((n) => (
+                    <option key={n} value={n}>
+                      {t(`fields.arriveDayOptions.${n}`)}
+                    </option>
+                  ))}
+                </select>
+              )}
+            </Field>
+          </div>
         </div>
       ) : null}
 
@@ -357,6 +378,15 @@ export function ItemForm({
               type="tel"
             />
           </div>
+          {selectedDay ? (
+            <p className="col-span-2 text-[13px] font-medium text-muted-teal">
+              {t("fields.checkOutOn", {
+                date: `${dayTitleAt(selectedDay.dayIndex + Math.max(1, Number(draft.details.nights ?? 1) || 1))}${
+                  draft.details.checkOutTime ? ` · ${draft.details.checkOutTime}` : ""
+                }`,
+              })}
+            </p>
+          ) : null}
         </div>
       ) : null}
 

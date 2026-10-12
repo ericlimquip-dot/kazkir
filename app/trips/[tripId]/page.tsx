@@ -141,6 +141,8 @@ export default async function TripPage({
             canContribute={canContribute}
             fallbackCurrency={cities[0]?.currency ?? "IDR"}
             rates={rates}
+            startDate={trip.start_date}
+            fallbackTimezone={cities[0]?.timezone ?? "UTC"}
           />
         ) : (
           <EmptyState title={t(`tabs.${tab}`)} description={t("comingSoon")} />

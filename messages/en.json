@@ -224,7 +224,14 @@
       "to": "To",
       "approxPerPerson": "≈ {amount} per person",
       "approxShared": "≈ {amount} for the group",
-      "localCurrencyHint": "{currency} — the local currency. Rupiah estimate appears as you type."
+      "localCurrencyHint": "{currency} — the local currency. Rupiah estimate appears as you type.",
+      "arriveDay": "Arrives",
+      "arriveDayOptions": {
+        "0": "Same day",
+        "1": "Next day (+1)",
+        "2": "2 days later (+2)"
+      },
+      "checkOutOn": "Check-out: {date}"
     },
     "more": "More details",
     "save": "Save",
@@ -250,6 +257,15 @@
       "forbidden": "You don't have permission to change this trip.",
       "failed": "Couldn't save. Check your connection and try again."
     },
-    "photo": "Photo"
+    "photo": "Photo",
+    "when": {
+      "when": "When",
+      "departs": "Departs",
+      "arrives": "Arrives",
+      "checkIn": "Check-in",
+      "checkOut": "Check-out",
+      "pickup": "Pickup"
+    },
+    "autoDone": "Marked done automatically — it ended {when}."
   }
 }

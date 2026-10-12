@@ -52,6 +52,7 @@ export type Item = {
   timezone: string | null;
   cost_amount: number | null;
   cost_currency: string | null;
+  cost_basis: "per_person" | "shared";
   notes: string | null;
   details: Record<string, unknown>;
 };

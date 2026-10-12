@@ -26,15 +26,17 @@ Companion to [design.md](design.md). Each milestone ends with something you can 
 
 ## M2 — Trips and itinerary
 
-- [ ] Home: trip cards by stage; create trip (title, destination cities, optional dates/day count)
-- [ ] Trip stages + date-setting that maps Day 1…N onto the calendar
-- [ ] Cities with time zone + currency; days linked to cities
-- [ ] Items: all 7 types with type-specific forms (design.md §4)
-- [ ] Tours: stops editor, voucher upload with client-side compression, operator WhatsApp link
-- [ ] Stay rendering across nights
-- [ ] Item detail sheet; status changes
+- [x] Home: trip cards by stage; create trip (title, destination cities, optional dates/day count)
+- [x] Trip stages + date-setting that maps Day 1…N onto the calendar
+- [x] Cities with time zone + currency; days linked to cities
+- [x] Items: all 7 types with type-specific forms (design.md §4)
+- [x] Tours: stops editor, voucher upload with client-side compression, operator WhatsApp link
+- [x] Stay rendering across nights
+- [x] Item detail sheet; status changes
 
 **Done when:** you can build a full undated trip plan, then set dates and see it on real days.
+
+Notes: tour stops are stored in `items.details.stops` (the `tour_stops` table is unused for now); an item's place is free text in `details.location` until M4 adds place search. Changing dates/length of an existing trip is still to do.
 
 ## M3 — Planning board
 

@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useState, type ReactNode } from "react";
 import { CityCombobox } from "@/components/city-combobox";
+import { PlanDemo } from "./plan-demo";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -89,6 +90,10 @@ export function GalleryView() {
               items={days}
             />
           </Card>
+        </Section>
+
+        <Section title="Plan board (sample data)">
+          <PlanDemo />
         </Section>
 
         <Section title="City search">

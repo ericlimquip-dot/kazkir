@@ -52,3 +52,14 @@ export function formatDateRange(startIso: string, endIso: string, locale: string
 export function shortTime(time: string | null): string | null {
   return time ? time.slice(0, 5) : null;
 }
+
+/** "28 Apr 2027" / "28 Apr 2027" (id) for a stand-alone calendar date. */
+export function formatDate(iso: string, locale: string): string {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(iso)) return iso;
+  return new Intl.DateTimeFormat(locale, {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(parseIsoDate(iso)));
+}

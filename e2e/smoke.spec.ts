@@ -40,3 +40,26 @@ test("city search fills in the country and time zone", async ({ page }) => {
   await expect(box).toHaveValue("Bishkek");
   await expect(page.getByTestId("picked-city")).toHaveText("KG · Asia/Bishkek");
 });
+
+test("plan board: stays span nights, tours show details, add opens the type picker", async ({
+  page,
+}) => {
+  await page.goto("/gallery");
+  await expect(page.getByText("Night 2 of 2")).toBeVisible();
+  await expect(page.getByText("Check-out")).toBeVisible();
+
+  await page.getByRole("button", { name: /Charyn Canyon day tour/ }).click();
+  const detail = page.getByRole("dialog", { name: "Charyn Canyon day tour" });
+  await expect(detail.getByRole("link", { name: "WhatsApp" })).toHaveAttribute(
+    "href",
+    "https://wa.me/77015550123",
+  );
+  await expect(detail.getByText("Kolsai Lake 1")).toBeVisible();
+  await page.keyboard.press("Escape");
+
+  await page.getByRole("button", { name: "Add", exact: true }).nth(1).click();
+  const add = page.getByRole("dialog", { name: /Add to Day 1/ });
+  await add.getByRole("button", { name: /Tour/ }).click();
+  await expect(add.getByLabel("Tour operator")).toBeVisible();
+  await expect(add.getByLabel("Currency")).toHaveValue("KZT");
+});

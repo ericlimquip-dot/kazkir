@@ -73,10 +73,18 @@
   },
   "Trips": {
     "title": "Perjalananmu",
-    "signedInAs": "Masuk sebagai {name}",
     "signOut": "Keluar",
     "emptyTitle": "Belum ada perjalanan",
-    "emptyDescription": "Fitur membuat perjalanan hadir di tahap berikutnya."
+    "emptyDescription": "Mulai dari ide dulu — tanggal bisa menyusul.",
+    "newTrip": "Perjalanan baru",
+    "stage": {
+      "idea": "Ide",
+      "planning": "Perencanaan",
+      "booked": "Sudah dipesan",
+      "ongoing": "Sedang berjalan",
+      "done": "Selesai"
+    },
+    "noDates": "{count} hari · belum ada tanggal"
   },
   "Install": {
     "title": "Tambahkan Kazkir ke layar utama",
@@ -90,5 +98,55 @@
   "Offline": {
     "title": "Kamu sedang offline",
     "description": "Perjalanan yang tersimpan akan bisa dibuka di sini setelah mode offline siap. Sambungkan internet untuk melanjutkan."
+  },
+  "NewTrip": {
+    "title": "Perjalanan baru",
+    "back": "Kembali ke daftar perjalanan",
+    "name": "Nama perjalanan",
+    "namePlaceholder": "Asia Tengah bareng tim",
+    "destinations": "Tujuan",
+    "destinationsHint": "Tambahkan setiap kota sesuai urutan kunjungan.",
+    "city": "Kota",
+    "cityPlaceholder": "Almaty",
+    "country": "Negara",
+    "chooseCountry": "Pilih negara",
+    "timezone": "Zona waktu",
+    "addCity": "Tambah kota lain",
+    "removeCity": "Hapus {city}",
+    "when": "Kapan",
+    "knowDates": "Tanggal sudah pasti",
+    "notYet": "Belum",
+    "startDate": "Hari pertama",
+    "endDate": "Hari terakhir",
+    "dayCount": "Berapa hari?",
+    "create": "Buat perjalanan",
+    "creating": "Membuat…",
+    "errors": {
+      "titleRequired": "Beri nama perjalanannya.",
+      "titleTooLong": "Namanya terlalu panjang (maksimal 120 karakter).",
+      "cityRequired": "Tambahkan minimal satu tujuan.",
+      "tooManyCities": "Satu perjalanan maksimal 12 kota.",
+      "cityInvalid": "Setiap tujuan perlu nama kota dan negara.",
+      "datesInvalid": "Periksa tanggalnya: hari terakhir harus sama atau setelah hari pertama, dan perjalanan maksimal 90 hari.",
+      "dayCountInvalid": "Pilih antara 1 sampai 90 hari.",
+      "saveFailed": "Perjalanan gagal disimpan. Periksa koneksi lalu coba lagi.",
+      "signedOut": "Kamu sudah keluar. Masuk lagi untuk melanjutkan."
+    }
+  },
+  "Trip": {
+    "back": "Perjalanan",
+    "tabs": {
+      "plan": "Rencana",
+      "ideas": "Ide",
+      "money": "Uang",
+      "people": "Anggota"
+    },
+    "wishlist": "Wishlist",
+    "wishlistHint": "Ide yang belum masuk ke hari tertentu",
+    "wishlistEmpty": "Belum ada apa-apa. Tempat yang masih ragu taruh di sini.",
+    "day": "Hari {n}",
+    "nothingPlanned": "Belum ada rencana",
+    "comingSoon": "Hadir di tahap berikutnya.",
+    "itemCount": "{count, plural, =0 {Hari bebas} other {# item}}"
   }
 }

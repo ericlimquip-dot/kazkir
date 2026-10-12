@@ -73,10 +73,18 @@
   },
   "Trips": {
     "title": "Your trips",
-    "signedInAs": "Signed in as {name}",
     "signOut": "Sign out",
     "emptyTitle": "No trips yet",
-    "emptyDescription": "Creating trips arrives in the next milestone."
+    "emptyDescription": "Start with an idea — dates can come later.",
+    "newTrip": "New trip",
+    "stage": {
+      "idea": "Idea",
+      "planning": "Planning",
+      "booked": "Booked",
+      "ongoing": "Ongoing",
+      "done": "Done"
+    },
+    "noDates": "{count, plural, one {# day} other {# days}} · no dates yet"
   },
   "Install": {
     "title": "Add Kazkir to your home screen",
@@ -90,5 +98,55 @@
   "Offline": {
     "title": "You're offline",
     "description": "Saved trips will open here once offline mode is ready. Reconnect to continue."
+  },
+  "NewTrip": {
+    "title": "New trip",
+    "back": "Back to trips",
+    "name": "Trip name",
+    "namePlaceholder": "Central Asia with the team",
+    "destinations": "Destinations",
+    "destinationsHint": "Add every city in the order you'll visit them.",
+    "city": "City",
+    "cityPlaceholder": "Almaty",
+    "country": "Country",
+    "chooseCountry": "Choose a country",
+    "timezone": "Time zone",
+    "addCity": "Add another city",
+    "removeCity": "Remove {city}",
+    "when": "When",
+    "knowDates": "I know the dates",
+    "notYet": "Not yet",
+    "startDate": "First day",
+    "endDate": "Last day",
+    "dayCount": "How many days?",
+    "create": "Create trip",
+    "creating": "Creating…",
+    "errors": {
+      "titleRequired": "Give the trip a name.",
+      "titleTooLong": "That name is too long (120 characters max).",
+      "cityRequired": "Add at least one destination.",
+      "tooManyCities": "A trip can have up to 12 cities.",
+      "cityInvalid": "Each destination needs a city name and a country.",
+      "datesInvalid": "Check the dates: the last day must be on or after the first, and a trip is at most 90 days.",
+      "dayCountInvalid": "Choose between 1 and 90 days.",
+      "saveFailed": "Couldn't save the trip. Check your connection and try again.",
+      "signedOut": "You've been signed out. Sign in again to continue."
+    }
+  },
+  "Trip": {
+    "back": "Trips",
+    "tabs": {
+      "plan": "Plan",
+      "ideas": "Ideas",
+      "money": "Money",
+      "people": "People"
+    },
+    "wishlist": "Wishlist",
+    "wishlistHint": "Ideas not on a day yet",
+    "wishlistEmpty": "Nothing here yet. Places you're not sure about go here.",
+    "day": "Day {n}",
+    "nothingPlanned": "Nothing planned yet",
+    "comingSoon": "Coming in a later milestone.",
+    "itemCount": "{count, plural, =0 {Free day} one {# item} other {# items}}"
   }
 }

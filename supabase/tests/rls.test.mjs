@@ -121,7 +121,8 @@ const strangerProfiles = await as(U.stranger, `select id from public.profiles`);
 check("stranger sees only own profile", strangerProfiles.rows.length === 1);
 
 // Itinerary writes by role
-const day = await as(U.owner, `insert into public.days (trip_id, day_index) values ($1, 1) returning id`, [tripId]);
+const day = await as(U.owner, `select id from public.days where trip_id = $1 and day_index = 1`, [tripId]);
+check("new trip gets its first day automatically", day.rows.length === 1);
 const dayId = day.rows[0].id;
 const editorItem = await tryAs(U.editor, `insert into public.items (trip_id, day_id, type, title) values ($1, $2, 'food', 'Ramen') returning id, version`, [tripId, dayId]);
 check("editor can add items", editorItem.ok, editorItem.error);
@@ -176,6 +177,25 @@ check("stranger cannot upload to trip folder",
   !(await tryAs(U.stranger, `insert into storage.objects (bucket_id, name, owner) values ('trip-files', $1, $2)`, [goodPath, U.stranger])).ok);
 const strangerFiles = await as(U.stranger, `select id from storage.objects`);
 check("stranger cannot see trip files", strangerFiles.rows.length === 0);
+
+// Day sync: growing/shrinking a trip, and cities filling empty days
+const dayCount = async () =>
+  (await as(U.owner, `select count(*)::int as n from public.days where trip_id = $1`, [tripId])).rows[0].n;
+await as(U.owner, `update public.trips set day_count = 4 where id = $1`, [tripId]);
+check("growing a trip adds days", (await dayCount()) === 4);
+const city = await as(U.owner,
+  `insert into public.trip_cities (trip_id, name, country_code, timezone, currency) values ($1, 'Almaty', 'KZ', 'Asia/Almaty', 'KZT') returning id`, [tripId]);
+const cityless = await as(U.owner, `select count(*)::int as n from public.days where trip_id = $1 and city_id is null`, [tripId]);
+check("first city fills empty days", cityless.rows[0].n === 0 && city.rows.length === 1);
+const day4 = (await as(U.owner, `select id from public.days where trip_id = $1 and day_index = 4`, [tripId])).rows[0].id;
+const late = await as(U.owner, `insert into public.items (trip_id, day_id, type, title) values ($1, $2, 'place', 'Big Almaty Lake') returning id`, [tripId, day4]);
+await as(U.owner, `update public.trips set day_count = 3 where id = $1`, [tripId]);
+check("shrinking a trip removes the last days", (await dayCount()) === 3);
+const moved = await as(U.owner, `select day_id from public.items where id = $1`, [late.rows[0].id]);
+check("items on removed days move to the wishlist", moved.rows[0].day_id === null);
+// (U.contrib was promoted to editor above, so use a non-member here.)
+check("non-member cannot change the trip length",
+  (await tryAs(U.stranger, `update public.trips set day_count = 10 where id = $1`, [tripId])).affected === 0);
 
 console.log(failures ? `\n${failures} FAILED` : "\nALL PASSED");
 process.exit(failures ? 1 : 0);

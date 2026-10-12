@@ -2,6 +2,8 @@ import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
 import { notFound, redirect } from "next/navigation";
 import { PlanBoard, type BoardDay } from "@/components/trip/plan-board";
+import { TripDates } from "@/components/trip/trip-dates";
+import { TripTitle } from "@/components/trip/trip-title";
 import { Chip } from "@/components/ui/chip";
 import { EmptyState } from "@/components/ui/empty-state";
 import { cn } from "@/lib/cn";
@@ -82,6 +84,7 @@ export default async function TripPage({
       title: `${t("day", { n: day.day_index })}${date ? ` · ${formatDayDate(date, locale)}` : ""}`,
       cityName: city?.name ?? null,
       currency: city?.currency ?? null,
+      timezone: city?.timezone ?? null,
     };
   });
 
@@ -97,18 +100,25 @@ export default async function TripPage({
 
         <header className="flex flex-col gap-2">
           <div className="flex flex-wrap items-center gap-3">
-            <h1 className="animate-section-rise text-[clamp(1.75rem,4vw,2.25rem)] font-medium leading-[1.12] tracking-[-0.04em] text-ink-strong motion-reduce:animate-none">
-              {trip.title}
-            </h1>
+            <TripTitle tripId={trip.id} title={trip.title} canEdit={canEdit} />
             <Chip tone={STAGE_TONE[trip.stage]}>{tStage(`stage.${trip.stage}`)}</Chip>
           </div>
-          <p className="text-[14px] font-medium text-muted">
-            {cities.map((c) => c.name).join(" → ")}
-            {cities.length > 0 ? " · " : ""}
-            {trip.start_date
-              ? formatDateRange(trip.start_date, endDateOf(trip.start_date, trip.day_count), locale)
-              : tStage("noDates", { count: trip.day_count })}
-          </p>
+          <TripDates
+            tripId={trip.id}
+            summary={`${cities.map((c) => c.name).join(" → ")}${cities.length > 0 ? " · " : ""}${
+              trip.start_date
+                ? formatDateRange(
+                    trip.start_date,
+                    endDateOf(trip.start_date, trip.day_count),
+                    locale,
+                  )
+                : tStage("noDates", { count: trip.day_count })
+            }`}
+            startDate={trip.start_date}
+            dayCount={trip.day_count}
+            stage={trip.stage}
+            canEdit={canEdit}
+          />
         </header>
 
         <nav

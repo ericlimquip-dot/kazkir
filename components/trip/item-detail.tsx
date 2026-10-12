@@ -8,7 +8,8 @@ import { cn } from "@/lib/cn";
 import { formatIdr, formatMoney, toIdr } from "@/lib/money/format";
 import type { IdrRates } from "@/lib/money/rates";
 import { formatDate } from "@/lib/trips/dates";
-import { whenRows } from "@/lib/trips/when";
+import { whenRows, type WhenRow } from "@/lib/trips/when";
+import { zoneParts } from "@/lib/trips/zones";
 import { ITEM_STATUSES, ITEM_TYPE_EMOJI, type Item, type ItemStatus } from "@/lib/trips/types";
 import { Vouchers } from "./vouchers";
 
@@ -85,11 +86,18 @@ export function ItemDetail({
   const add = (label: string, value: ReactNode | undefined) => {
     if (value !== undefined && value !== "") rows.push([label, value]);
   };
-  // Every time comes with its date: "Day 2 · Sun, 2 May · 12:00".
+  // Every time comes with its date and the place it's local to:
+  // "Day 2 · Sun, 2 May · 12:00 Almaty time (GMT+5)".
+  const zoneText = (tz: string) => {
+    const { name, offset, indonesian } = zoneParts(tz);
+    return t(indonesian ? "zoneIndonesian" : "zone", { name, offset });
+  };
+  const moment = (m: WhenRow, time = m.time) =>
+    `${dayTitleAt(m.dayIndex)}${time ? ` · ${time}${m.timezone ? ` ${zoneText(m.timezone)}` : ""}` : ""}`;
   const moments = whenRows(item, dayIndex);
   if (moments.length === 0) add(t("fields.day"), dayLabel);
   for (const m of moments) {
-    add(t(`when.${m.kind}`), `${dayTitleAt(m.dayIndex)}${m.time ? ` · ${m.time}` : ""}`);
+    add(t(`when.${m.kind}`), moment(m));
   }
   const lastMoment = moments.at(-1);
   add(t("fields.location"), text("location"));
@@ -157,7 +165,7 @@ export function ItemDetail({
       {autoDone && lastMoment ? (
         <p className="rounded-2xl bg-[#ecf8ef] px-3 py-2 text-[13px] font-medium text-[#2f6b3f]">
           {t("autoDone", {
-            when: `${dayTitleAt(lastMoment.dayIndex)}${lastMoment.time ? ` · ${lastMoment.time.split("–").pop()}` : ""}`,
+            when: moment(lastMoment, lastMoment.time?.split("–").pop()),
           })}
         </p>
       ) : null}

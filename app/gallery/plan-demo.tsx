@@ -1,6 +1,8 @@
 "use client";
 
 import { PlanBoard, type BoardDay } from "@/components/trip/plan-board";
+import { TripDates } from "@/components/trip/trip-dates";
+import { TripTitle } from "@/components/trip/trip-title";
 import type { Item } from "@/lib/trips/types";
 
 // Sample data for the developer gallery. Saving won't work here (no real trip), but every
@@ -13,6 +15,7 @@ const DAYS: BoardDay[] = [
     title: "Day 1 · Sat, 1 May",
     cityName: "Almaty",
     currency: "KZT",
+    timezone: "Asia/Almaty",
   },
   {
     id: "00000000-0000-4000-8000-0000000000d2",
@@ -20,6 +23,7 @@ const DAYS: BoardDay[] = [
     title: "Day 2 · Sun, 2 May",
     cityName: "Almaty",
     currency: "KZT",
+    timezone: "Asia/Almaty",
   },
   {
     id: "00000000-0000-4000-8000-0000000000d3",
@@ -27,6 +31,7 @@ const DAYS: BoardDay[] = [
     title: "Day 3 · Mon, 3 May",
     cityName: "Bishkek",
     currency: "KGS",
+    timezone: "Asia/Bishkek",
   },
 ];
 
@@ -50,11 +55,14 @@ const ITEMS: Item[] = [
     title: "Jakarta → Almaty",
     status: "booked",
     start_time: "08:15:00",
+    end_time: "13:40:00",
     details: {
       fromAirport: "CGK",
       toAirport: "ALA",
       flightNumber: "KC 932",
       bookingCode: "X7K2PQ",
+      departTimezone: "Asia/Jakarta",
+      arriveTimezone: "Asia/Almaty",
     },
   },
   {
@@ -107,16 +115,29 @@ const ITEMS: Item[] = [
 
 export function PlanDemo() {
   return (
-    <PlanBoard
-      tripId={TRIP}
-      days={DAYS}
-      items={ITEMS}
-      canEdit
-      canContribute
-      fallbackCurrency="KZT"
-      startDate="2027-05-01"
-      fallbackTimezone="Asia/Almaty"
-      rates={{ KZT: 39.48, KGS: 207.25, USD: 17860, EUR: 20000, IDR: 1 }}
-    />
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-2">
+        <TripTitle tripId={TRIP} title="Central Asia with the team" canEdit />
+        <TripDates
+          tripId={TRIP}
+          summary="Almaty → Bishkek · 7 days · no dates yet"
+          startDate={null}
+          dayCount={7}
+          stage="idea"
+          canEdit
+        />
+      </div>
+      <PlanBoard
+        tripId={TRIP}
+        days={DAYS}
+        items={ITEMS}
+        canEdit
+        canContribute
+        fallbackCurrency="KZT"
+        startDate="2027-05-01"
+        fallbackTimezone="Asia/Almaty"
+        rates={{ KZT: 39.48, KGS: 207.25, USD: 17860, EUR: 20000, IDR: 1 }}
+      />
+    </div>
   );
 }

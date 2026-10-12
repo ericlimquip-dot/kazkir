@@ -119,3 +119,31 @@ describe("auto-done", () => {
 });
 
 const DAY = 24 * 60 * 60 * 1000;
+
+describe("flights across time zones", () => {
+  const flight = {
+    type: "flight" as const,
+    status: "booked" as const,
+    start_time: "08:15:00",
+    end_time: "13:40:00",
+    timezone: "Asia/Almaty",
+    details: { departTimezone: "Asia/Jakarta", arriveTimezone: "Asia/Almaty" },
+  };
+
+  it("departs in the origin's zone and arrives in the destination's", () => {
+    expect(whenRows(flight, 1)).toEqual([
+      { kind: "departs", dayIndex: 1, time: "08:15", timezone: "Asia/Jakarta" },
+      { kind: "arrives", dayIndex: 1, time: "13:40", timezone: "Asia/Almaty" },
+    ]);
+  });
+
+  it("finishes at the arrival time in the arrival zone", () => {
+    expect(new Date(endMoment(flight, 1, "2027-05-01")!).toISOString()).toBe(
+      "2027-05-01T08:40:00.000Z",
+    );
+  });
+
+  it("falls back to the item's zone when none was chosen", () => {
+    expect(whenRows({ ...flight, details: {} }, 1)[0].timezone).toBe("Asia/Almaty");
+  });
+});

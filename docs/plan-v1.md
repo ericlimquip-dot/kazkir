@@ -36,7 +36,7 @@ Companion to [design.md](design.md). Each milestone ends with something you can 
 
 **Done when:** you can build a full undated trip plan, then set dates and see it on real days.
 
-Notes: tour stops are stored in `items.details.stops` (the `tour_stops` table is unused for now); an item's place is free text in `details.location` until M4 adds place search. Changing dates/length of an existing trip is still to do.
+Notes: tour stops are stored in `items.details.stops` (the `tour_stops` table is unused for now); an item's place is free text in `details.location` until M4 adds place search. Trips can be renamed and given/changed dates or length after creation (idea → planning on first dates). Every time is shown with its date and local zone; flights carry departure/arrival zones; planned/booked items show as done once their end passes.
 
 ## M3 — Planning board
 

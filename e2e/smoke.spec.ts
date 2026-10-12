@@ -63,3 +63,20 @@ test("plan board: stays span nights, tours show details, add opens the type pick
   await expect(add.getByLabel("Tour operator")).toBeVisible();
   await expect(add.getByLabel("Currency")).toHaveValue("KZT");
 });
+
+test("trip dates editor keeps the length and warns before removing days", async ({ page }) => {
+  await page.goto("/gallery");
+  await page.getByRole("button", { name: "Set dates" }).click();
+  const sheet = page.getByRole("dialog", { name: "Trip dates" });
+  await sheet.getByLabel("First day").fill("2027-05-01");
+  await expect(sheet.getByLabel("Last day")).toHaveValue("2027-05-07");
+  await sheet.getByLabel("Last day").fill("2027-05-05");
+  await expect(sheet.getByRole("status")).toContainText("Days 6–7 will be removed");
+});
+
+test("flights show their own time zones", async ({ page }) => {
+  await page.goto("/gallery");
+  await expect(page.getByRole("button", { name: /Jakarta → Almaty/ })).toContainText(
+    "08:15 WIB → 13:40 Almaty",
+  );
+});

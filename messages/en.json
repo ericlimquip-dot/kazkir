@@ -147,7 +147,20 @@
     "day": "Day {n}",
     "nothingPlanned": "Nothing planned yet",
     "comingSoon": "Coming in a later milestone.",
-    "itemCount": "{count, plural, =0 {Free day} one {# item} other {# items}}"
+    "itemCount": "{count, plural, =0 {Free day} one {# item} other {# items}}",
+    "rename": "Rename trip",
+    "tripName": "Trip name",
+    "save": "Save",
+    "saving": "Saving…",
+    "cancel": "Cancel",
+    "renameForbidden": "Only the trip's owner and editors can rename it.",
+    "setDates": "Set dates",
+    "changeDates": "Change dates",
+    "datesTitle": "Trip dates",
+    "dayTotal": "{count, plural, one {# day} other {# days}}",
+    "shrinkWarning": "Days {from}–{to} will be removed. Anything planned on them moves to the Wishlist.",
+    "shrinkWarningOne": "Day {day} will be removed. Anything planned on it moves to the Wishlist.",
+    "stageNote": "Setting dates moves this trip from Idea to Planning."
   },
   "Item": {
     "add": "Add",
@@ -231,7 +244,10 @@
         "1": "Next day (+1)",
         "2": "2 days later (+2)"
       },
-      "checkOutOn": "Check-out: {date}"
+      "checkOutOn": "Check-out: {date}",
+      "departTimezone": "Departure time zone",
+      "arriveTimezone": "Arrival time zone",
+      "allZones": "All time zones"
     },
     "more": "More details",
     "save": "Save",
@@ -266,6 +282,9 @@
       "checkOut": "Check-out",
       "pickup": "Pickup"
     },
-    "autoDone": "Marked done automatically — it ended {when}."
+    "autoDone": "Marked done automatically — it ended {when}.",
+    "zone": "{name} time ({offset})",
+    "zoneIndonesian": "{name} ({offset})",
+    "timesAreLocal": "Times are local to where you'll be."
   }
 }

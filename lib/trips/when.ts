@@ -3,7 +3,7 @@ import type { Item } from "./types";
 export type WhenKind = "when" | "departs" | "arrives" | "checkIn" | "checkOut" | "pickup";
 
 /** One dated moment of an item: which trip day (1-based, may run past the trip's end) and an optional time. */
-export type WhenRow = { kind: WhenKind; dayIndex: number; time?: string };
+export type WhenRow = { kind: WhenKind; dayIndex: number; time?: string; timezone?: string };
 
 const hhmm = (t: unknown) => (typeof t === "string" && t ? t.slice(0, 5) : undefined);
 const range = (a?: string, b?: string) => (a && b ? `${a}–${b}` : a);
@@ -13,6 +13,25 @@ const range = (a?: string, b?: string) => (a && b ? `${a}–${b}` : a);
  * Stays check out `nights` days later; overnight flights arrive `arriveDayOffset` days later.
  */
 export function whenRows(
+  item: Pick<Item, "type" | "start_time" | "end_time" | "details"> & { timezone?: string | null },
+  dayIndex: number | null,
+): WhenRow[] {
+  const tz = item.timezone ?? undefined;
+  const d = item.details as Record<string, unknown>;
+  const zone = (key: string) => (typeof d[key] === "string" && d[key] ? (d[key] as string) : tz);
+  return rawRows(item, dayIndex).map((row) => ({
+    ...row,
+    // Flights cross zones: departure in the origin's time, arrival in the destination's.
+    timezone:
+      row.kind === "departs"
+        ? zone("departTimezone")
+        : row.kind === "arrives"
+          ? zone("arriveTimezone")
+          : tz,
+  }));
+}
+
+function rawRows(
   item: Pick<Item, "type" | "start_time" | "end_time" | "details">,
   dayIndex: number | null,
 ): WhenRow[] {
@@ -103,7 +122,7 @@ export function endMoment(
     .slice(0, 10);
   // "08:00–18:00" → 18:00. No check-out time entered: assume the usual noon.
   const time = last.time?.split("–").pop() ?? (last.kind === "checkOut" ? "12:00" : "23:59");
-  const tz = item.timezone || fallbackTimezone;
+  const tz = last.timezone || item.timezone || fallbackTimezone;
   try {
     return zonedTimeToUtc(date, time, tz);
   } catch {

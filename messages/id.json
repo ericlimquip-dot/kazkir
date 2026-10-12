@@ -147,7 +147,20 @@
     "day": "Hari {n}",
     "nothingPlanned": "Belum ada rencana",
     "comingSoon": "Hadir di tahap berikutnya.",
-    "itemCount": "{count, plural, =0 {Hari bebas} other {# item}}"
+    "itemCount": "{count, plural, =0 {Hari bebas} other {# item}}",
+    "rename": "Ganti nama perjalanan",
+    "tripName": "Nama perjalanan",
+    "save": "Simpan",
+    "saving": "Menyimpan…",
+    "cancel": "Batal",
+    "renameForbidden": "Hanya pemilik dan editor yang bisa mengganti nama perjalanan.",
+    "setDates": "Atur tanggal",
+    "changeDates": "Ubah tanggal",
+    "datesTitle": "Tanggal perjalanan",
+    "dayTotal": "{count} hari",
+    "shrinkWarning": "Hari {from}–{to} akan dihapus. Semua rencana di hari itu pindah ke Wishlist.",
+    "shrinkWarningOne": "Hari {day} akan dihapus. Semua rencana di hari itu pindah ke Wishlist.",
+    "stageNote": "Mengatur tanggal memindahkan perjalanan ini dari Ide ke Perencanaan."
   },
   "Item": {
     "add": "Tambah",
@@ -231,7 +244,10 @@
         "1": "Besoknya (+1)",
         "2": "2 hari kemudian (+2)"
       },
-      "checkOutOn": "Check-out: {date}"
+      "checkOutOn": "Check-out: {date}",
+      "departTimezone": "Zona waktu keberangkatan",
+      "arriveTimezone": "Zona waktu kedatangan",
+      "allZones": "Semua zona waktu"
     },
     "more": "Detail lainnya",
     "save": "Simpan",
@@ -266,6 +282,9 @@
       "checkOut": "Check-out",
       "pickup": "Jemput"
     },
-    "autoDone": "Otomatis ditandai selesai — sudah berakhir {when}."
+    "autoDone": "Otomatis ditandai selesai — sudah berakhir {when}.",
+    "zone": "waktu {name} ({offset})",
+    "zoneIndonesian": "{name} ({offset})",
+    "timesAreLocal": "Semua jam mengikuti waktu setempat."
   }
 }

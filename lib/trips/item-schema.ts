@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { isValidTimezone } from "@/lib/geo/countries";
 import { ITEM_STATUSES, ITEM_TYPES } from "./types";
 
 // Empty form fields arrive as "" — treat them as "not set".
@@ -22,6 +23,11 @@ const isoDate = z
   .optional()
   .or(z.literal("").transform(() => undefined));
 
+const timezone = optionalText(64).refine(
+  (tz) => tz === undefined || isValidTimezone(tz),
+  "Unknown time zone",
+);
+
 export const TRANSPORT_MODES = ["train", "bus", "transfer", "ferry", "car", "other"] as const;
 export const MAX_TOUR_STOPS = 20;
 
@@ -42,6 +48,8 @@ export const DETAILS_SCHEMAS = {
     bookingCode: optionalText(40),
     // Overnight flights land the next day (or the one after, for long hauls).
     arriveDayOffset: z.coerce.number().int().min(0).max(2).optional(),
+    departTimezone: timezone,
+    arriveTimezone: timezone,
   }),
   stay: z.object({
     nights: z.coerce.number().int().min(1).max(90).default(1),

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { countryDefaults, listCountries } from "@/lib/geo/countries";
 import { validateCreateTrip } from "@/lib/trips/create-trip";
+import { validateTripDates } from "@/lib/trips/trip-dates";
 import { dateOfDay, daysBetween, endDateOf, formatDayDate, shortTime } from "@/lib/trips/dates";
 
 describe("trip dates", () => {
@@ -109,5 +110,33 @@ describe("validateCreateTrip", () => {
       dayCount: 2,
     });
     expect(r.ok && r.trip.cities[0].timezone).toBe("Asia/Almaty");
+  });
+});
+
+describe("validateTripDates", () => {
+  it("sets dates and derives the length", () => {
+    expect(validateTripDates({ startDate: "2027-05-01", endDate: "2027-05-07" })).toEqual({
+      ok: true,
+      startDate: "2027-05-01",
+      dayCount: 7,
+    });
+  });
+  it("keeps a trip undated with a new length", () => {
+    expect(validateTripDates({ dayCount: 4 })).toEqual({ ok: true, startDate: null, dayCount: 4 });
+  });
+  it("rejects backwards or over-long dates and silly lengths", () => {
+    expect(validateTripDates({ startDate: "2027-05-07", endDate: "2027-05-01" })).toEqual({
+      ok: false,
+      error: "datesInvalid",
+    });
+    expect(validateTripDates({ startDate: "2027-01-01", endDate: "2027-12-31" })).toEqual({
+      ok: false,
+      error: "datesInvalid",
+    });
+    expect(validateTripDates({ startDate: "2027-05-01" })).toEqual({
+      ok: false,
+      error: "datesInvalid",
+    });
+    expect(validateTripDates({ dayCount: 0 })).toEqual({ ok: false, error: "dayCountInvalid" });
   });
 });

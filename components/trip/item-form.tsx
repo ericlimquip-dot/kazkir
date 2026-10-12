@@ -6,6 +6,7 @@ import { saveItem } from "@/app/trips/[tripId]/item-actions";
 import { Button } from "@/components/ui/button";
 import { COMMON_CURRENCIES, parseAmount } from "@/lib/money/format";
 import type { IdrRates } from "@/lib/money/rates";
+import { HOME_ZONES, zoneOffset, zoneShort } from "@/lib/trips/zones";
 import { CostField } from "./cost-field";
 import { cn } from "@/lib/cn";
 import { MAX_TOUR_STOPS, TRANSPORT_MODES } from "@/lib/trips/item-schema";
@@ -21,7 +22,13 @@ import {
 export const INPUT =
   "min-h-11 w-full rounded-xl border border-line bg-white px-3 text-[16px] text-ink outline-none focus:border-sky-300 focus:ring-2 focus:ring-sky-100";
 
-export type DayOption = { id: string; dayIndex: number; label: string; currency: string | null };
+export type DayOption = {
+  id: string;
+  dayIndex: number;
+  label: string;
+  currency: string | null;
+  timezone: string | null;
+};
 
 type Stop = { key: number; time: string; name: string; note: string };
 
@@ -143,6 +150,10 @@ export function ItemForm({
     event.preventDefault();
     setError(null);
     const details: Record<string, unknown> = { ...draft.details };
+    if (draft.type === "flight") {
+      details.departTimezone ||= defaultDepartZone;
+      details.arriveTimezone ||= dayZone;
+    }
     if (draft.type === "tour") {
       details.stops = draft.stops
         .filter((s) => s.name.trim())
@@ -176,6 +187,14 @@ export function ItemForm({
 
   const type = draft.type;
   const selectedDay = days.find((d) => d.id === draft.dayId);
+  // Flights: leave from where you were the day before (home on Day 1), land where today is.
+  const dayZone = selectedDay?.timezone ?? days[0]?.timezone ?? "UTC";
+  const defaultDepartZone = selectedDay
+    ? (days.find((d) => d.dayIndex === selectedDay.dayIndex - 1)?.timezone ?? HOME_ZONES[0])
+    : HOME_ZONES[0];
+  const zoneOptions = [
+    ...new Set([...days.map((d) => d.timezone).filter((z): z is string => !!z), ...HOME_ZONES]),
+  ];
 
   return (
     <form onSubmit={submit} className="flex flex-col gap-4" noValidate>
@@ -330,6 +349,20 @@ export function ItemForm({
               )}
             </Field>
           </div>
+          <ZoneSelect
+            label={t("fields.departTimezone")}
+            value={draft.details.departTimezone || defaultDepartZone}
+            options={zoneOptions}
+            allLabel={t("fields.allZones")}
+            onChange={(tz) => setDetail("departTimezone", tz)}
+          />
+          <ZoneSelect
+            label={t("fields.arriveTimezone")}
+            value={draft.details.arriveTimezone || dayZone}
+            options={zoneOptions}
+            allLabel={t("fields.allZones")}
+            onChange={(tz) => setDetail("arriveTimezone", tz)}
+          />
         </div>
       ) : null}
 
@@ -535,6 +568,47 @@ export function ItemForm({
         </Button>
       </div>
     </form>
+  );
+}
+
+function ZoneSelect({
+  label,
+  value,
+  options,
+  allLabel,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  options: string[];
+  allLabel: string;
+  onChange: (tz: string) => void;
+}) {
+  const label_ = (tz: string) => `${zoneShort(tz)} (${zoneOffset(tz)})`;
+  const all =
+    typeof Intl.supportedValuesOf === "function" ? Intl.supportedValuesOf("timeZone") : [];
+  const others = all.filter((tz) => !options.includes(tz));
+  return (
+    <Field label={label}>
+      {(id) => (
+        <select id={id} className={INPUT} value={value} onChange={(e) => onChange(e.target.value)}>
+          {(options.includes(value) ? options : [value, ...options]).map((tz) => (
+            <option key={tz} value={tz}>
+              {label_(tz)}
+            </option>
+          ))}
+          {others.length > 0 ? (
+            <optgroup label={allLabel}>
+              {others.map((tz) => (
+                <option key={tz} value={tz}>
+                  {tz.replace(/_/g, " ")}
+                </option>
+              ))}
+            </optgroup>
+          ) : null}
+        </select>
+      )}
+    </Field>
   );
 }
 

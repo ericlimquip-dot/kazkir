@@ -8,6 +8,7 @@ import { IconTile } from "@/components/ui/icon-tile";
 import { Sheet } from "@/components/ui/sheet";
 import { dateOfDay, formatDayDate, shortTime } from "@/lib/trips/dates";
 import { effectiveStatus } from "@/lib/trips/when";
+import { zoneShort } from "@/lib/trips/zones";
 import { ITEM_TYPE_EMOJI, type Item, type ItemStatus } from "@/lib/trips/types";
 import { formatIdr, formatMoney, toIdr } from "@/lib/money/format";
 import type { IdrRates } from "@/lib/money/rates";
@@ -20,6 +21,7 @@ export type BoardDay = {
   title: string; // "Day 2 · Wed, 3 Mar"
   cityName: string | null;
   currency: string | null;
+  timezone: string | null;
 };
 
 type SheetState =
@@ -79,6 +81,7 @@ export function PlanBoard({
     dayIndex: d.dayIndex,
     label: d.title,
     currency: d.currency,
+    timezone: d.timezone,
   }));
   /** "Day 3 · Mon, 3 May", also past the trip's last day (stay check-outs, overnight arrivals). */
   const dayTitleAt = (n: number) => {
@@ -327,8 +330,14 @@ function ItemRow({
     const idr = toIdr(Number(item.cost_amount), item.cost_currency, rates);
     cost = idr !== null && item.cost_currency !== "IDR" ? `≈ ${formatIdr(idr)} (${local})` : local;
   }
+  // Flights cross zones, so their times say where: "08:15 WIB → 13:40 Almaty".
+  const d = item.details as { departTimezone?: string; arriveTimezone?: string };
+  let when = start ? (end ? `${start}–${end}` : start) : null;
+  if (item.type === "flight" && start && d.departTimezone) {
+    when = `${start} ${zoneShort(d.departTimezone)}${end ? ` → ${end} ${zoneShort(d.arriveTimezone ?? d.departTimezone)}` : ""}`;
+  }
   const meta = [
-    start ? (end ? `${start}–${end}` : start) : null,
+    when,
     typeof item.details.location === "string" ? item.details.location : null,
     cost,
   ].filter(Boolean);
